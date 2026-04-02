@@ -27,3 +27,46 @@ body {
   max-width: 1566px;
   margin: 0 auto;
 }
+
+/* ── Navigation Arrows ───────────────────────── */
+.swiper-button-next,
+.swiper-button-prev {
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: background 0.2s ease;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Resize the arrow icon itself */
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 16px;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* ✅ Correct — bullets are injected into .custom-pagination */
+.custom-pagination .swiper-pagination-bullet {
+  width: 57px !important;
+  height: 8px !important;
+  background: rgba(255, 255, 255, 0.5) !important;
+  opacity: 1 !important;
+  border-radius: 9999px !important;
+  transition: all 0.3s ease !important;
+}
+
+.custom-pagination .swiper-pagination-bullet-active {
+  width: 57px !important;
+  height: 8px !important;
+  background: #ffffff !important;
+  opacity: 1 !important;
+  border-radius: 9999px !important;
+}
