@@ -11,6 +11,7 @@ const buttonVariants = cva(
     "transition-all duration-300",
     "focus:outline-none focus:ring-2 focus:ring-primary-purple",
     "disabled:pointer-events-none disabled:opacity-50",
+    "max-w-auto w-fit",
   ],
   {
     variants: {
@@ -28,9 +29,7 @@ const buttonVariants = cva(
       },
 
       size: {
-        sm: "h-9 px-4 text-sm",
-        md: "h-11 px-6 text-base",
-        lg: "h-14 px-8 text-lg",
+        md: "py-[17px] px-[25px] text-xl font-medium",
       },
     },
 
