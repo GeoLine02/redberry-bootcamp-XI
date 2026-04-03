@@ -1,10 +1,14 @@
-import Image from "next/image";
 import Slider from "./components/Slider";
+import StartLerning from "./components/StartLerning";
+import { getFeaturedCourses } from "./services";
 
-export default function Home() {
+export default async function Home() {
+  const featuredCourses = await getFeaturedCourses();
+
   return (
     <div>
       <Slider />
+      <StartLerning courses={featuredCourses?.data ?? []} />
     </div>
   );
 }
