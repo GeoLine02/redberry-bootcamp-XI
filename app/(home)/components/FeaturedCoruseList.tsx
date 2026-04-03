@@ -12,6 +12,7 @@ export default function FeaturedCoruseList({
     <div className="grid grid-cols-3 mt-8">
       {courses.map((course) => (
         <CourseCard
+          id={course.id}
           description={course.description}
           imageSrc={course.image}
           lecturer={course.instructor.name}

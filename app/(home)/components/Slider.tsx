@@ -13,8 +13,8 @@ import SliderBgTwo from "@/public/SliderBg2.png";
 import SliderBgThree from "@/public/SliderBg3.png";
 import { StaticImageData } from "next/image";
 import { Button } from "@/ui/Button";
-import ArrowLeft from "@/public/ArrowLeft.svg";
-import ArrowRight from "@/public/ArrowRight.svg";
+import ArrowLeft from "@/public/ArrowLeftCircled.svg";
+import ArrowRight from "@/public/ArrowRightCircled.svg";
 
 const sliderData = [
   {
