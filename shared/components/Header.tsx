@@ -10,10 +10,11 @@ import SignInModal from "./auth/SignInModal";
 import SignUpModal from "./auth/SignUpModal";
 import BookIcon from "@/public/Book.svg";
 import UserPreview from "./UserPreview";
+import { useUser } from "@/provider/UserProvider";
 
 export default function Header() {
   const { openModal } = useModal();
-  const token = localStorage.getItem("accessToken");
+  const { user } = useUser();
   return (
     <header className="border-b border-border-gray">
       <div className="flex items-center  justify-between py-6 container">
@@ -28,7 +29,7 @@ export default function Header() {
                 </span>
               </Link>
             </li>
-            {token && (
+            {user && (
               <>
                 <li>
                   <Link
@@ -44,7 +45,7 @@ export default function Header() {
                 <UserPreview />
               </>
             )}
-            {!token && (
+            {!user && (
               <div className="flex items-center gap-3.75">
                 <Button
                   onClick={() => openModal(<SignInModal />)}

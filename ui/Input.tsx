@@ -30,7 +30,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             {props.label}
           </label>
         )}
-        <div className="border-2 border-light-gray w-full flex items-center gap-2 px-3.25 py-4 rounded-lg">
+        <div className="border-2 border-border-gray bg-light-gray w-full flex items-center gap-2 px-3.25 py-4 rounded-lg">
           <input
             {...props}
             ref={ref} // forward ref to input

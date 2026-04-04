@@ -8,7 +8,7 @@ import { logOut } from "../services/auth";
 import { useUser } from "@/provider/UserProvider";
 export default function UserPreview() {
   const [toggleMenu, setToggleMenu] = useState(false);
-  const { setUser } = useUser();
+  const { user, setUser } = useUser();
   const handleLogOut = async () => {
     await logOut();
     setUser(null);
@@ -26,7 +26,9 @@ export default function UserPreview() {
         className="bg-light-purple rounded-full w-14 aspect-square relative cursor-pointer flex items-center justify-center"
       >
         <Image src={UserIcon} alt="User" />
-        <div className=" absolute bg-warning-color w-3.5 z-10 aspect-square rounded-full bottom-0 -right-0.5"></div>
+        <div
+          className={`${user?.profileComplete ? "bg-success" : "bg-warning-color"} absolute w-3.5 z-10 aspect-square rounded-full bottom-0 -right-0.5`}
+        ></div>
       </div>
       {toggleMenu && (
         <div className="absolute top-23 z-20 right-24 mt-2 w-48 bg-white border-border-gray rounded-md shadow-lg py-2">
