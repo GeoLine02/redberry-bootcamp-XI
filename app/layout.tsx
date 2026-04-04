@@ -5,6 +5,7 @@ import Header from "@/shared/components/Header";
 import Footer from "@/shared/components/Footer";
 import { ModalProvider } from "@/provider/ModalProvider";
 import UserProvider from "@/provider/UserProvider";
+import { EnrollmentsProvider } from "@/provider/EnrollmentsProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,11 +34,13 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <UserProvider>
-          <ModalProvider>
-            <Header />
-            <main className="flex-1 container">{children}</main>
-            <Footer />
-          </ModalProvider>
+          <EnrollmentsProvider>
+            <ModalProvider>
+              <Header />
+              <main className="flex-1 container">{children}</main>
+              <Footer />
+            </ModalProvider>
+          </EnrollmentsProvider>
         </UserProvider>
       </body>
     </html>

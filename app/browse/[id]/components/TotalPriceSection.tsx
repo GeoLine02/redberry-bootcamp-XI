@@ -3,7 +3,7 @@ import { Button } from "@/ui/Button";
 interface TotalPriceSectionProps {
   totalPrice: number;
   basePrice: number;
-  sessionPrice: number;
+  sessionPrice: number | null;
   isLastStep: boolean;
   handleEnroll: () => Promise<void>;
 }
@@ -18,7 +18,7 @@ export default function TotalPriceSection({
     <div className="bg-white rounded-xl p-10">
       <div className="w-full flex items-center justify-between">
         <h1 className="text-medium-gray text-xl font-semibold">Total Price</h1>
-        <h1 className="text-[32px] font-semibold">{totalPrice}</h1>
+        <h1 className="text-[32px] font-semibold">${totalPrice}</h1>
       </div>
       <div className="mt-8 space-y-2">
         <div className="flex w-full items-center justify-between font-medium">
