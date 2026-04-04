@@ -3,7 +3,13 @@
 import Image from "next/image";
 import ArrowDownIcon from "@/public/ArrowDown.svg";
 import ArrowUpIcon from "@/public/ArrowUp.svg";
-import { SessionType, TimeSlotType, WeeklyScheduleType } from "../types";
+import {
+  CourseEnrollmentDetailsType,
+  CourseEnrollmentType,
+  SessionType,
+  TimeSlotType,
+  WeeklyScheduleType,
+} from "../types";
 import WeeklySchedule from "./WeeklySchedule";
 import { useEffect, useState } from "react";
 import TimeSlotSection from "./TimeSlotSection";
@@ -15,6 +21,7 @@ import { useModal } from "@/provider/ModalProvider";
 import SignInModal from "@/shared/components/auth/SignInModal";
 import IncompleteAccountWarning from "./IncompleteAccountWarning";
 import UnauthenticationWarning from "./UnauthenticationWarning";
+import { useEnrollments } from "@/provider/EnrollmentsProvider";
 
 interface EnrollTypeHeaderProps {
   step: number;
@@ -61,6 +68,8 @@ const EnrollTypeHeader = ({
 interface EnrollNowProps {
   weeklySchedules: WeeklyScheduleType[];
   courseId: number;
+  basePrice: number;
+  enrollment: CourseEnrollmentDetailsType;
 }
 
 export interface SelectedOptions {
@@ -72,6 +81,8 @@ export interface SelectedOptions {
 export default function EnrollNow({
   weeklySchedules,
   courseId,
+  basePrice,
+  enrollment,
 }: EnrollNowProps) {
   const { user } = useUser();
   const [collapsedSection, setCollapsedSection] = useState<
@@ -85,7 +96,9 @@ export default function EnrollNow({
     sessionTypeId: null,
     timeSlotId: null,
   });
-  console.log(selectedOptions);
+  const [enrolledCourse, setEnrolledCourse] =
+    useState<CourseEnrollmentDetailsType | null>(enrollment);
+  const [priceModifier, setPriceModifier] = useState<number | null>(null);
   const handleChooseWeeklySchedule = (scheduleId: number) => {
     setSelectedOptons((prev) => ({
       ...prev,
@@ -103,10 +116,16 @@ export default function EnrollNow({
   };
 
   const hadnleChooseSessionType = (sessionTypeId: number) => {
+    const selectedSession = sessions.find(
+      (session) => session.id === sessionTypeId,
+    );
     setSelectedOptons((prev) => ({
       ...prev,
       sessionTypeId,
     }));
+    if (selectedSession) {
+      setPriceModifier(selectedSession.priceModifier);
+    }
     setCollapsedSection("payment");
   };
 
@@ -121,6 +140,7 @@ export default function EnrollNow({
         return;
       }
       const res = await enrollOnCourse(selectedOptions, false, token);
+      setEnrolledCourse(res.data);
       console.log(res);
     } catch (error) {
       console.log(error);
@@ -169,6 +189,8 @@ export default function EnrollNow({
     selectedOptions.sessionTypeId,
   ]);
 
+  const totalPrice = Number(basePrice) + Number(priceModifier);
+
   return (
     <section className="space-y-8 w-full  max-w-132.5">
       <section>
@@ -214,10 +236,10 @@ export default function EnrollNow({
           <IncompleteAccountWarning />
         ) : (
           <TotalPriceSection
-            sessionPrice={1}
-            basePrice={1}
+            sessionPrice={priceModifier}
+            basePrice={basePrice}
+            totalPrice={totalPrice}
             isLastStep={collapsedSection !== "payment"}
-            totalPrice={1}
             handleEnroll={handleEnroll}
           />
         )}

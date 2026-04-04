@@ -64,3 +64,21 @@ export interface SessionType {
   availableSeats: number;
   location: string;
 }
+
+export interface CourseEnrollmentDetailsType {
+  id: number;
+  quantity: number;
+  totalPrice: number;
+  progress: number;
+  completedAt: string; // API returns ISO string
+  course: CourseType & {
+    category: CourseCategoryType;
+    topic: CourseTopicType;
+    instructor: CourseInstructorType;
+  };
+  schedule: {
+    weeklySchedule: WeeklyScheduleType;
+    timeSlot: TimeSlotType;
+    sessionType: SessionType;
+  };
+}

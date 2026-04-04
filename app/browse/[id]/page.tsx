@@ -4,6 +4,7 @@ import Image from "next/image";
 import { getCourseDetails, getWeeklySchedules } from "./services";
 import CourseStats from "./components/CourseStats";
 import EnrollNow from "./components/EnrollNow";
+import EnrolledCourse from "./components/EnrolledCourse";
 interface CourseDetailsProps {
   params: Promise<{
     id: number;
@@ -13,13 +14,9 @@ interface CourseDetailsProps {
 export default async function CourseDetails({ params }: CourseDetailsProps) {
   const resolvedParams = await params;
   const courseDetails = await getCourseDetails(Number(resolvedParams.id));
-  console.log(courseDetails);
-
-  // const timeSlots = await getTimeSlots(Number(resolvedParams.id));
+  console.log("details: ", courseDetails);
 
   const weeklySchedules = await getWeeklySchedules(Number(resolvedParams.id));
-  console.log(weeklySchedules);
-  // const sessionTypes = await getSessionTypes(Number(resolvedParams.id));
 
   return (
     <div>
@@ -47,10 +44,17 @@ export default async function CourseDetails({ params }: CourseDetailsProps) {
           rating={courseDetails.data.rating}
           title={courseDetails.data.title}
         />
-        <EnrollNow
-          weeklySchedules={weeklySchedules.data}
-          courseId={courseDetails.data.id}
-        />
+        {courseDetails.data.enrollment && (
+          <EnrolledCourse enrollment={courseDetails.data.enrollment} />
+        )}
+        {!courseDetails.data.enrollment && (
+          <EnrollNow
+            weeklySchedules={weeklySchedules.data}
+            courseId={courseDetails.data.id}
+            basePrice={courseDetails.data.basePrice}
+            enrollment={courseDetails.data.enrollment}
+          />
+        )}
       </div>
     </div>
   );
