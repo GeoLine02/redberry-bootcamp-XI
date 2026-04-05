@@ -12,7 +12,6 @@ export async function getCourses(
   search?: string,
 ) {
   try {
-    console.log(sort);
     const query = new URLSearchParams();
     query.append("page", String(page ?? 1));
     if (search) query.append("search", search);

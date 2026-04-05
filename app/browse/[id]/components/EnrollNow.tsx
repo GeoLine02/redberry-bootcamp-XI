@@ -139,7 +139,6 @@ export default function EnrollNow({
     setCollapsedSection("payment");
   };
 
-  console.log("selectedOptions", selectedOptions);
   const { openModal } = useModal();
 
   const handleEnroll = async () => {
@@ -148,22 +147,18 @@ export default function EnrollNow({
         openModal(<SignInModal />);
         return;
       }
-      console.log("selectedOptions: ", selectedOptions);
       const res = await enrollOnCourse(courseId, selectedOptions, false);
-      console.log(res.data);
       setEnrolledCourse(res.data);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.log(error.response.data);
     }
   };
-  console.log(enrolledCourse);
   const handleCompleteEnrollment = async () => {
     try {
       if (!enrolledCourse) return;
 
       const res = await completeEnrollment(enrolledCourse.id);
-      console.log("comeplete: ", res);
 
       setEnrolledCourse(res.data);
     } catch (error) {
@@ -218,7 +213,6 @@ export default function EnrollNow({
           selectedOptions.weeklyScheduleId as number,
           selectedOptions.timeSlotId as number,
         );
-        console.log("session types", res.data);
 
         setSessions(res.data);
         setCollapsedSection("payment");

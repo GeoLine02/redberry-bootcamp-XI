@@ -18,7 +18,6 @@ export async function signUp(formData: FormData) {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log(res);
     return res.data;
   } catch (error) {
     throw error;

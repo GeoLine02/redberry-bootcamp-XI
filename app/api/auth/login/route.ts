@@ -11,7 +11,6 @@ export async function POST(req: Request) {
   });
 
   const data = await backendRes.json();
-  console.log("3434", data);
   const response = NextResponse.json(data);
 
   // ✅ SET COOKIE HERE

@@ -31,7 +31,6 @@ export default function ProfileModal() {
   console.log(errors);
   const { closeModal } = useModal();
   const { user, setUser } = useUser();
-  console.log("userrrr", user);
   useEffect(() => {
     if (user) {
       reset({

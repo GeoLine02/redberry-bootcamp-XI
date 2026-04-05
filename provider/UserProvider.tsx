@@ -40,7 +40,6 @@ export default function UserProvider({ children }: UserProviderProps) {
   useEffect(() => {
     const fetchUser = async () => {
       const userData = await fetchMe();
-      console.log("$$$$", userData);
       setUser(userData.data);
     };
     fetchUser();
