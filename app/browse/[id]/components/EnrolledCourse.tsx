@@ -2,22 +2,28 @@ import { Button } from "@/ui/Button";
 import { CourseEnrollmentDetailsType } from "../types";
 import CheckMarkIcon from "@/public/CheckMark.svg";
 import Image from "next/image";
+import RepeatIcon from "@/public/Repeat.svg";
 
 interface EnrolledCourseProps {
   enrollment: CourseEnrollmentDetailsType;
+  handleCompleteEnrollment: () => Promise<void>;
+  retakeEnrollment: () => Promise<void>;
 }
 
-export default function EnrolledCourse({ enrollment }: EnrolledCourseProps) {
-  console.log("123", enrollment);
+export default function EnrolledCourse({
+  enrollment,
+  handleCompleteEnrollment,
+  retakeEnrollment,
+}: EnrolledCourseProps) {
   const isCompleted = enrollment.progress === 100;
 
   return (
-    <div>
-      <div
-        className={`${isCompleted ? "bg-success/30 text-success" : "bg-light-purple text-medium-purple"} p-4 font-medium`}
+    <div className="w-full max-w-113 space-y-5.5 mt-17.5">
+      <span
+        className={`${isCompleted ? "bg-success/10 text-success" : "bg-light-purple text-primary-purple"} p-4 font-medium rounded-full inline-block`}
       >
         {isCompleted ? "Completed" : "Enrolled"}
-      </div>
+      </span>
 
       <ul className="space-y-5.5 text-dark-gray">
         <li>{enrollment.schedule.weeklySchedule.label}</li>
@@ -26,24 +32,39 @@ export default function EnrolledCourse({ enrollment }: EnrolledCourseProps) {
         <li>{enrollment.schedule.sessionType.location}</li>
       </ul>
 
-      <p className="text-sm text-dark-gray font-medium">
-        {enrollment.progress}% completed
-      </p>
-      <div className="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
-        <div
-          className="h-full bg-primary-purple transition-all duration-300"
-          style={{ width: `${enrollment.progress}%` }}
-        />
+      <div className="space-y-3">
+        <p className="text-sm text-dark-gray font-medium">
+          {enrollment.progress}% completed
+        </p>
+        <div className="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-primary-purple transition-all rounded-r-full duration-300"
+            style={{ width: `${enrollment.progress}%` }}
+          />
+        </div>
       </div>
 
-      <Button
-        variant={"primary"}
-        className="flex items-center gap-2.5 w-full justify-center"
-        aria-labelledby="complete course button"
-      >
-        <span>Complete Course</span>
-        <Image src={CheckMarkIcon} alt="check mark icon" />
-      </Button>
+      {enrollment.progress !== 100 ? (
+        <Button
+          onClick={handleCompleteEnrollment}
+          variant={"primary"}
+          className="flex items-center gap-2.5 w-full justify-center"
+          aria-labelledby="complete course button"
+        >
+          <span>Complete Course</span>
+          <Image src={CheckMarkIcon} alt="check mark icon" />
+        </Button>
+      ) : (
+        <Button
+          onClick={retakeEnrollment}
+          variant={"primary"}
+          className="flex items-center gap-2.5 w-full justify-center"
+          aria-labelledby="repeat course button"
+        >
+          <span>Retake Course</span>
+          <Image src={RepeatIcon} alt="repaet icon" />
+        </Button>
+      )}
     </div>
   );
 }

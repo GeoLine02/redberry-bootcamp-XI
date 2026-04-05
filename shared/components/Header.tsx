@@ -4,17 +4,9 @@ import Logo from "@/ui/Logo";
 import Image from "next/image";
 import Link from "next/link";
 import BrowseIcon from "@/public/BrowseCourses.svg";
-import { Button } from "@/ui/Button";
-import { useModal } from "@/provider/ModalProvider";
-import SignInModal from "./auth/SignInModal";
-import SignUpModal from "./auth/SignUpModal";
-import BookIcon from "@/public/Book.svg";
-import UserPreview from "./UserPreview";
-import { useUser } from "@/provider/UserProvider";
+import AuthButtons from "./AuthButtons";
 
 export default function Header() {
-  const { openModal } = useModal();
-  const { user } = useUser();
   return (
     <header className="border-b border-border-gray">
       <div className="flex items-center  justify-between py-6 container">
@@ -22,45 +14,15 @@ export default function Header() {
         <nav>
           <ul className="flex items-center gap-9">
             <li>
-              <Link className="flex gap-1 items-center" href={"/courses"}>
+              <Link className="flex gap-1 items-center" href={"/browse"}>
                 <Image src={BrowseIcon} alt="Browse Courses" />
                 <span className="text-dark-gray font-medium">
                   Browse Courses
                 </span>
               </Link>
             </li>
-            {user && (
-              <>
-                <li>
-                  <Link
-                    href={"/enrolled-courses"}
-                    className="flex gap-1 items-center"
-                  >
-                    <Image src={BookIcon} alt="Browse Courses" />
-                    <span className="text-dark-gray font-medium">
-                      Enrolled Courses
-                    </span>
-                  </Link>
-                </li>
-                <UserPreview />
-              </>
-            )}
-            {!user && (
-              <div className="flex items-center gap-3.75">
-                <Button
-                  onClick={() => openModal(<SignInModal />)}
-                  variant={"outline"}
-                >
-                  Log In
-                </Button>
-                <Button
-                  onClick={() => openModal(<SignUpModal />)}
-                  variant={"primary"}
-                >
-                  Sign Up
-                </Button>
-              </div>
-            )}
+
+            <AuthButtons />
           </ul>
         </nav>
       </div>

@@ -1,4 +1,4 @@
-import CourseCard from "@/shared/components/CourseCard";
+import CorrseFeatureCard from "@/shared/components/CourseFeatureCard";
 import { CourseType } from "@/shared/types";
 
 interface FeaturedCoruseListProps {
@@ -11,7 +11,7 @@ export default function FeaturedCoruseList({
   return (
     <div className="grid grid-cols-3 mt-8">
       {courses.map((course) => (
-        <CourseCard
+        <CorrseFeatureCard
           id={course.id}
           description={course.description}
           imageSrc={course.image}

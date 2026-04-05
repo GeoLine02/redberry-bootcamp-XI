@@ -1,14 +1,14 @@
 "use client";
 
-import api from "@/utils/axios";
+import { fetchMe } from "@/shared/services/auth";
 import {
   createContext,
   useContext,
   useState,
   ReactNode,
-  useEffect,
   Dispatch,
   SetStateAction,
+  useEffect,
 } from "react";
 
 // 1. Define the shape of your user data
@@ -37,23 +37,15 @@ interface UserProviderProps {
 export default function UserProvider({ children }: UserProviderProps) {
   const [user, setUser] = useState<User | null>(null);
 
-  const fetchMe = async () => {
-    try {
-      const res = await api.get("/me", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
-      setUser(res.data.data);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
-
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchMe();
+    const fetchUser = async () => {
+      const userData = await fetchMe();
+      console.log("$$$$", userData);
+      setUser(userData.data);
+    };
+    fetchUser();
   }, []);
+
   return (
     <UserContext.Provider value={{ user, setUser }}>
       {children}

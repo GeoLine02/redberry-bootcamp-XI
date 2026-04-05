@@ -2,47 +2,47 @@ import { WeeklyScheduleType } from "../types";
 import { SelectedOptions } from "./EnrollNow";
 
 interface WeeklyScheduleProps {
-  schedules: WeeklyScheduleType[];
+  weeklySchedules: WeeklyScheduleType[];
   handleChooseWeeklySchedule: (scheduleId: number) => void;
   selectedOptions: SelectedOptions;
 }
 
 interface ScheduleCardProps {
-  schedule: WeeklyScheduleType;
+  weeklySchedule: WeeklyScheduleType;
   handleChooseWeeklySchedule: (scheduleId: number) => void;
   selectedOptions: SelectedOptions;
 }
 
 const ScheduleCard = ({
-  schedule,
+  weeklySchedule,
   handleChooseWeeklySchedule,
   selectedOptions,
 }: ScheduleCardProps) => {
-  const isSelected = selectedOptions.scheduleId === schedule.id;
+  const isSelected = selectedOptions.weeklyScheduleId === weeklySchedule.id;
 
   return (
     <div
-      onClick={() => handleChooseWeeklySchedule(schedule.id)}
+      onClick={() => handleChooseWeeklySchedule(weeklySchedule.id)}
       className={`${isSelected && "bg-light-purple! text-primary-purple border-primary-purple"} border p-2 bg-white border-border-gray rounded-xl text-center flex items-center justify-center max-w-30.75 h-22.75 cursor-pointer transition-all duration-200 ease-in-out hover:bg-light-purple hover:text-primary-purple hover:border-primary-purple`}
     >
-      <h1 className="font-semibold">{schedule.label}</h1>
+      <h1 className="font-semibold">{weeklySchedule.label}</h1>
     </div>
   );
 };
 
 export default function WeeklySchedule({
-  schedules,
+  weeklySchedules,
   handleChooseWeeklySchedule,
   selectedOptions,
 }: WeeklyScheduleProps) {
   return (
     <div className="flex gap-3 mt-4.5">
-      {schedules.map((schedule) => (
+      {weeklySchedules.map((weeklySchedule) => (
         <ScheduleCard
           selectedOptions={selectedOptions}
           handleChooseWeeklySchedule={handleChooseWeeklySchedule}
-          key={schedule.id}
-          schedule={schedule}
+          key={weeklySchedule.id}
+          weeklySchedule={weeklySchedule}
         />
       ))}
     </div>

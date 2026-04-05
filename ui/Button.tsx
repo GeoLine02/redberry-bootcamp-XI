@@ -30,7 +30,8 @@ const buttonVariants = cva(
 
       size: {
         sm: "py-[10px] px-[12px] text-sm font-medium",
-        md: "py-[17px] px-[25px] text-xl font-medium",
+        md: "py-[12px] px-[25px] font-medium",
+        lg: "py-[17px] px-[25px] text-xl font-medium",
       },
     },
 

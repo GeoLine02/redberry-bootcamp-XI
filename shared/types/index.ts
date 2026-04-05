@@ -15,18 +15,22 @@ export interface CourseType {
   title: string;
   description: string;
   image: string;
-  basePrice: string;
+  basePrice: number;
   durationWeeks: number;
   isFeatured: boolean;
-  avgRating: string;
+  avgRating: number;
   reviewCount: number;
+  category: CategoryType;
   topic: CourseTopicType;
   instructor: InstructorType;
 }
 
-// types/enrollment.ts
+export interface CoursesWithPagination {
+  data: CourseType[];
+  meta: PaginationType;
+}
 
-export interface Category {
+export interface CategoryType {
   id: number;
   name: string;
   icon: string;
@@ -42,21 +46,6 @@ export interface Instructor {
   id: number;
   name: string;
   avatar: string;
-}
-
-export interface Course {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  basePrice: number;
-  durationWeeks: number;
-  isFeatured: boolean;
-  avgRating: number;
-  reviewCount: number;
-  category: Category;
-  topic: Topic;
-  instructor: Instructor;
 }
 
 export interface WeeklySchedule {
@@ -94,6 +83,13 @@ export interface Enrollment {
   totalPrice: number;
   progress: number;
   completedAt: string;
-  course: Course;
+  course: CourseType;
   schedule: Schedule;
+}
+
+export interface PaginationType {
+  currentPage: number;
+  lastPage: number;
+  perPage: number;
+  total: number;
 }
