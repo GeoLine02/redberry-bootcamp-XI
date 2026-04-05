@@ -13,20 +13,19 @@ export async function fetchMe() {
 
 export async function signUp(formData: FormData) {
   try {
-    const res = await api.post("/register", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const res = await axios.post("api/auth/register", formData);
     return res.data;
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    if (error.response?.data?.errors) {
+      throw error.response.data; // { message, errors: { username: [...] } }
+    }
     throw error;
   }
 }
 
 export async function signIn(data: { email: string; password: string }) {
   try {
-    // call NEXT.JS route handler (not backend)
     const res = await axios.post("/api/auth/login", data);
     return res.data;
   } catch (error) {

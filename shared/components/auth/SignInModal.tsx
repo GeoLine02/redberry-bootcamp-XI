@@ -35,8 +35,7 @@ export default function SignInModal() {
   const onSubmit = async (data: SignInFormValues) => {
     try {
       const res = await signIn(data);
-
-      setUser(res.user);
+      setUser(res.data.user);
       closeModal();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {

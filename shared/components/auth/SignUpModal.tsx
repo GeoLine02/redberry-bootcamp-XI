@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import Image from "next/image";
@@ -43,18 +42,15 @@ export default function SignUpModal() {
   });
 
   const nextStep = async () => {
-    // Define fields to validate per step
     const stepFields: Record<number, (keyof SignUpFormValues)[]> = {
       1: ["email"],
       2: ["password", "confirmPassword"],
       3: ["username", "image"],
     };
 
-    // Validate only current step fields
     const valid = await trigger(stepFields[currentStep]);
     if (!valid) return;
 
-    // If last step, submit
     if (currentStep === 3) {
       handleSubmit(onSubmit)();
       return;
@@ -67,24 +63,6 @@ export default function SignUpModal() {
     if (currentStep > 1) setCurrentStep((s) => s - 1);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleBackendErrors = (error: any) => {
-    Object.entries(error.response.data.errors).forEach(([_field, messages]) => {
-      setError("root", {
-        type: "server",
-        message: (messages as string[])[0],
-      });
-    });
-
-    // optional global error
-    if (error.message) {
-      setError("root.serverError", {
-        type: "server",
-        message: error.message,
-      });
-    }
-  };
-  // Final submit handler
   const onSubmit: SubmitHandler<SignUpFormValues> = async (
     data: SignUpFormValues,
   ) => {
@@ -101,8 +79,10 @@ export default function SignUpModal() {
       setUser(res.data.user);
       localStorage.setItem("accessToken", res.data.token);
       closeModal();
-    } catch (error) {
-      handleBackendErrors(error);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      const firstMessage = Object.values(error.errors).flat()[0] as string;
+      setError("root", { type: "server", message: firstMessage });
     }
   };
 
@@ -135,7 +115,6 @@ export default function SignUpModal() {
           </p>
         </div>
 
-        {/* Step Components */}
         {currentStep === 1 && (
           <SignUpStepOne register={register} errors={errors} />
         )}
