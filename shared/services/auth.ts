@@ -28,7 +28,12 @@ export async function signIn(data: { email: string; password: string }) {
   try {
     const res = await axios.post("/api/auth/login", data);
     return res.data;
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    console.log(error);
+    if (error.response?.data?.message) {
+      throw error.response.data; // { message, errors: { username: [...] } }
+    }
     throw error;
   }
 }

@@ -39,11 +39,8 @@ export default function SignInModal() {
       closeModal();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      console.error(err.response?.data?.message);
-
-      setError("root", {
-        message: err.response?.data?.message || "An error occurred",
-      });
+      console.log(err);
+      setError("root", { message: err.message });
     }
   };
 
