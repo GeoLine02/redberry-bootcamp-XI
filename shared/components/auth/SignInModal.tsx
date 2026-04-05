@@ -34,20 +34,17 @@ export default function SignInModal() {
   const { setUser } = useUser();
   const onSubmit = async (data: SignInFormValues) => {
     try {
-      console.log("Logging in with", data);
-      // TODO: call API
-
       const res = await signIn(data);
-      setUser(res.data.user);
-      localStorage.setItem("accessToken", res.data.token);
+
+      setUser(res.user);
       closeModal();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      console.error(err.response?.data.message);
+      console.error(err.response?.data?.message);
+
       setError("root", {
-        message: err.response?.data.message || "An error occurred",
+        message: err.response?.data?.message || "An error occurred",
       });
-      // optionally handle login errors
     }
   };
 

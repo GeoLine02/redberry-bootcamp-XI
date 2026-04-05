@@ -27,28 +27,6 @@ const EnrollmentsContext = createContext<EnrollmentsContextType | undefined>(
 export const EnrollmentsProvider = ({ children }: { children: ReactNode }) => {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const { user } = useUser();
-  useEffect(() => {
-    const fetchEnrollments = async () => {
-      if (!user) return;
-
-      const accessToken = localStorage.getItem("accessToken");
-
-      try {
-        const res = await api.get("/enrollments", {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
-
-        setEnrollments(res.data.data);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (err: any) {
-        console.error("Failed to fetch enrollments:", err);
-        setError(err.response.data.message);
-      }
-    };
-
-    fetchEnrollments();
-  }, [user]);
 
   return (
     <EnrollmentsContext.Provider

@@ -1,14 +1,6 @@
 import api from "@/utils/axios";
 import { SelectedOptions } from "../components/EnrollNow";
-
-export async function getCourseDetails(courseId: number) {
-  try {
-    const res = await api.get(`/courses/${courseId}`);
-    return res.data;
-  } catch (error) {
-    throw error;
-  }
-}
+import axios from "axios";
 
 export async function getSessionTypes(
   courseId: number,
@@ -46,24 +38,34 @@ export async function getWeeklySchedules(courseId: number) {
 }
 
 export async function enrollOnCourse(
+  courseId: number,
   selectedOptions: SelectedOptions,
   force: boolean,
-  token: string,
 ) {
   try {
-    const res = await api.post(
-      "/enrollments",
-      {
-        courseId: 1,
-        courseScheduleId: selectedOptions.scheduleId,
-        force: force,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
+    const res = await axios.post("/api/enrollments", {
+      courseId: courseId,
+      courseScheduleId: selectedOptions.courseScheduleId,
+      force: force,
+    });
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function completeEnrollment(enrollmentId: number) {
+  try {
+    const res = await axios.patch(`/api/enrollments/${enrollmentId}/complete`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function retakeCourse(enrollmentId: number) {
+  try {
+    const res = await axios.delete(`/api/enrollments/${enrollmentId}/retake`);
     return res.data;
   } catch (error) {
     throw error;

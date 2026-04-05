@@ -31,7 +31,7 @@ export default function ProfileModal() {
   console.log(errors);
   const { closeModal } = useModal();
   const { user, setUser } = useUser();
-
+  console.log("userrrr", user);
   useEffect(() => {
     if (user) {
       reset({
@@ -128,7 +128,11 @@ export default function ProfileModal() {
             placeholder="Username"
             {...register("fullName")}
           />
-          {errors.age && <span>{errors.age.message}</span>}
+          {errors.fullName && (
+            <span className="text-xs text-red-500">
+              {errors.fullName.message}
+            </span>
+          )}
         </div>
 
         {/* Email */}
@@ -140,7 +144,9 @@ export default function ProfileModal() {
             className="bg-gray-100 cursor-not-allowed"
             readOnly
           />
-          {errors.email && <span>{errors.email.message}</span>}
+          {errors.email && (
+            <span className="text-xs text-red-500">{errors.email.message}</span>
+          )}
         </div>
 
         {/* Phone + Age */}
@@ -151,24 +157,50 @@ export default function ProfileModal() {
               placeholder="+995 599209820"
               {...register("phone")}
             />
-            {errors.phone && <span>{errors.phone.message}</span>}
+            {errors.phone && (
+              <span className="text-xs text-red-500">
+                {errors.phone.message}
+              </span>
+            )}
           </div>
 
           <Controller
             control={control}
             name="age"
-            render={({ field }) => (
-              <div>
-                <label htmlFor="Age">Age</label>
-                <DropDown
-                  label="Age"
-                  options={ageOptions}
-                  value={field.value}
-                  onChange={field.onChange}
-                />
-                {errors.age && <span>{errors.age.message}</span>}
-              </div>
-            )}
+            render={({ field }) => {
+              return (
+                <div>
+                  <label htmlFor="Age" className="block mb-1 font-medium">
+                    Age
+                  </label>
+
+                  {/* Controlled DropDown */}
+                  <DropDown>
+                    <DropDown.Trigger className="w-full border rounded px-3 py-2 text-left">
+                      {field.value ? field.value : "Select age"}
+                    </DropDown.Trigger>
+
+                    <DropDown.Menu className="mt-1 border rounded bg-white shadow-lg max-h-60 overflow-auto">
+                      {ageOptions.map((option) => (
+                        <DropDown.Item
+                          onSelect={() => field.onChange(option.value)}
+                          key={option.value}
+                          className="px-3 py-2 cursor-pointer hover:bg-gray-100"
+                        >
+                          {option.label}
+                        </DropDown.Item>
+                      ))}
+                    </DropDown.Menu>
+                  </DropDown>
+
+                  {errors.age && (
+                    <span className="text-red-500 text-xs">
+                      {errors.age.message}
+                    </span>
+                  )}
+                </div>
+              );
+            }}
           />
         </div>
 

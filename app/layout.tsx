@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/shared/components/Header";
 import Footer from "@/shared/components/Footer";
@@ -7,14 +7,9 @@ import { ModalProvider } from "@/provider/ModalProvider";
 import UserProvider from "@/provider/UserProvider";
 import { EnrollmentsProvider } from "@/provider/EnrollmentsProvider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: "--font-inter", // optional (for Tailwind)
 });
 
 export const metadata: Metadata = {
@@ -28,16 +23,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="en" className={`${inter.className} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <UserProvider>
           <EnrollmentsProvider>
             <ModalProvider>
               <Header />
-              <main className="flex-1 container">{children}</main>
+              <main className="flex-1 container pb-40.25">{children}</main>
               <Footer />
             </ModalProvider>
           </EnrollmentsProvider>

@@ -13,7 +13,13 @@ import {
 import WeeklySchedule from "./WeeklySchedule";
 import { useEffect, useState } from "react";
 import TimeSlotSection from "./TimeSlotSection";
-import { enrollOnCourse, getSessionTypes, getTimeSlots } from "../services";
+import {
+  completeEnrollment,
+  enrollOnCourse,
+  getSessionTypes,
+  getTimeSlots,
+  retakeCourse,
+} from "../services";
 import SesstionTypeSection from "./SesstionTypeSection";
 import TotalPriceSection from "./TotalPriceSection";
 import { useUser } from "@/provider/UserProvider";
@@ -21,7 +27,7 @@ import { useModal } from "@/provider/ModalProvider";
 import SignInModal from "@/shared/components/auth/SignInModal";
 import IncompleteAccountWarning from "./IncompleteAccountWarning";
 import UnauthenticationWarning from "./UnauthenticationWarning";
-import { useEnrollments } from "@/provider/EnrollmentsProvider";
+import EnrolledCourse from "./EnrolledCourse";
 
 interface EnrollTypeHeaderProps {
   step: number;
@@ -73,7 +79,8 @@ interface EnrollNowProps {
 }
 
 export interface SelectedOptions {
-  scheduleId: number | null;
+  weeklyScheduleId: number | null; // step 1
+  courseScheduleId: number | null; // comes from session
   timeSlotId: number | null;
   sessionTypeId: number | null;
 }
@@ -88,23 +95,22 @@ export default function EnrollNow({
   const [collapsedSection, setCollapsedSection] = useState<
     "weeklySchedules" | "timeSlots" | "sessionType" | "payment"
   >("weeklySchedules");
-
   const [timeSlots, setTimeSlots] = useState<TimeSlotType[]>([]);
   const [sessions, setSessions] = useState<SessionType[]>([]);
   const [selectedOptions, setSelectedOptons] = useState<SelectedOptions>({
-    scheduleId: null,
+    courseScheduleId: null,
+    weeklyScheduleId: null,
     sessionTypeId: null,
     timeSlotId: null,
   });
   const [enrolledCourse, setEnrolledCourse] =
-    useState<CourseEnrollmentDetailsType | null>(enrollment);
+    useState<CourseEnrollmentDetailsType | null>(enrollment || null);
   const [priceModifier, setPriceModifier] = useState<number | null>(null);
   const handleChooseWeeklySchedule = (scheduleId: number) => {
     setSelectedOptons((prev) => ({
       ...prev,
-      scheduleId,
+      weeklyScheduleId: scheduleId,
     }));
-    setCollapsedSection("timeSlots");
   };
 
   const handleChooseTimeSlot = (timeSlotId: number) => {
@@ -112,139 +118,184 @@ export default function EnrollNow({
       ...prev,
       timeSlotId,
     }));
+
     setCollapsedSection("sessionType");
   };
 
-  const hadnleChooseSessionType = (sessionTypeId: number) => {
+  const hadnleChooseSessionType = (sessionId: number) => {
     const selectedSession = sessions.find(
-      (session) => session.id === sessionTypeId,
+      (session) => session.id === sessionId,
     );
+
+    if (!selectedSession) return;
+
     setSelectedOptons((prev) => ({
       ...prev,
-      sessionTypeId,
+      sessionTypeId: selectedSession.id,
+      courseScheduleId: selectedSession.courseScheduleId,
     }));
-    if (selectedSession) {
-      setPriceModifier(selectedSession.priceModifier);
-    }
+
+    setPriceModifier(selectedSession.priceModifier);
     setCollapsedSection("payment");
   };
 
+  console.log("selectedOptions", selectedOptions);
   const { openModal } = useModal();
 
   const handleEnroll = async () => {
     try {
-      const token = localStorage.getItem("accessToken");
-      if (!token) {
-        console.log("1231231");
+      if (!user) {
         openModal(<SignInModal />);
         return;
       }
-      const res = await enrollOnCourse(selectedOptions, false, token);
+      console.log("selectedOptions: ", selectedOptions);
+      const res = await enrollOnCourse(courseId, selectedOptions, false);
+      console.log(res.data);
       setEnrolledCourse(res.data);
-      console.log(res);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.log(error.response.data);
+    }
+  };
+  console.log(enrolledCourse);
+  const handleCompleteEnrollment = async () => {
+    try {
+      if (!enrolledCourse) return;
+
+      const res = await completeEnrollment(enrolledCourse.id);
+      console.log("comeplete: ", res);
+
+      setEnrolledCourse(res.data);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const retakeEnrollment = async () => {
+    if (!enrolledCourse) return; // ⭐ IMPORTANT
+
+    try {
+      const res = await retakeCourse(enrolledCourse.id);
+
+      setEnrolledCourse((prev) =>
+        prev
+          ? {
+              ...prev,
+              progress: res.data.progress,
+            }
+          : prev,
+      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.log(error.response?.data);
+    }
+  };
+
   useEffect(() => {
-    const handleFetchTimeSLots = async () => {
+    const fetchTimeSlots = async () => {
+      if (!selectedOptions.weeklyScheduleId) return;
       try {
         const res = await getTimeSlots(
           courseId,
-          selectedOptions.scheduleId as number,
+          selectedOptions.weeklyScheduleId!,
         );
         setTimeSlots(res.data);
-      } catch (error) {
-        console.log(error);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (err: any) {
+        console.log(err.response.data);
       }
     };
-
-    if (selectedOptions.scheduleId) {
-      handleFetchTimeSLots();
-    }
-  }, [courseId, selectedOptions.scheduleId]);
+    fetchTimeSlots();
+  }, [courseId, selectedOptions.weeklyScheduleId]);
 
   useEffect(() => {
-    const handleFetchSession = async () => {
+    if (!selectedOptions.timeSlotId) return;
+
+    const fetchSessions = async () => {
       try {
         const res = await getSessionTypes(
           courseId,
-          selectedOptions.scheduleId as number,
+          selectedOptions.weeklyScheduleId as number,
           selectedOptions.timeSlotId as number,
         );
+        console.log("session types", res.data);
+
         setSessions(res.data);
         setCollapsedSection("payment");
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        console.log(err);
       }
     };
-    if (selectedOptions.timeSlotId) {
-      handleFetchSession();
-    }
-  }, [
-    courseId,
-    selectedOptions.timeSlotId,
-    selectedOptions.scheduleId,
-    selectedOptions.sessionTypeId,
-  ]);
+
+    fetchSessions();
+  }, [courseId, selectedOptions.weeklyScheduleId, selectedOptions.timeSlotId]);
 
   const totalPrice = Number(basePrice) + Number(priceModifier);
 
   return (
-    <section className="space-y-8 w-full  max-w-132.5">
-      <section>
-        <EnrollTypeHeader
-          isCollapsed={collapsedSection === "weeklySchedules"}
-          step={1}
-          stepLabel="Select Weekly Schedule"
+    <>
+      {enrolledCourse ? (
+        <EnrolledCourse
+          handleCompleteEnrollment={handleCompleteEnrollment}
+          enrollment={enrolledCourse}
+          retakeEnrollment={retakeEnrollment}
         />
+      ) : (
+        <section className="space-y-8 w-full  max-w-132.5">
+          <section>
+            <EnrollTypeHeader
+              isCollapsed={collapsedSection === "weeklySchedules"}
+              step={1}
+              stepLabel="Select Weekly Schedule"
+            />
 
-        <WeeklySchedule
-          handleChooseWeeklySchedule={handleChooseWeeklySchedule}
-          schedules={weeklySchedules}
-          selectedOptions={selectedOptions}
-        />
-      </section>
-      <section>
-        <EnrollTypeHeader
-          isCollapsed={collapsedSection === "timeSlots"}
-          step={2}
-          stepLabel="Time Slot"
-        />
+            <WeeklySchedule
+              handleChooseWeeklySchedule={handleChooseWeeklySchedule}
+              weeklySchedules={weeklySchedules}
+              selectedOptions={selectedOptions}
+            />
+          </section>
+          <section>
+            <EnrollTypeHeader
+              isCollapsed={collapsedSection === "timeSlots"}
+              step={2}
+              stepLabel="Time Slot"
+            />
 
-        <TimeSlotSection
-          handleChooseTimeSlot={handleChooseTimeSlot}
-          timeSlots={timeSlots}
-          selectedOptions={selectedOptions}
-        />
-      </section>
-      <section>
-        <EnrollTypeHeader
-          isCollapsed={collapsedSection === "sessionType"}
-          step={3}
-          stepLabel="Session Type"
-        />
-        <SesstionTypeSection
-          sessions={sessions}
-          handleChooseSessionType={hadnleChooseSessionType}
-          selectedOptions={selectedOptions}
-        />
-      </section>
-      <section>
-        {!user?.profileComplete ? (
-          <IncompleteAccountWarning />
-        ) : (
-          <TotalPriceSection
-            sessionPrice={priceModifier}
-            basePrice={basePrice}
-            totalPrice={totalPrice}
-            isLastStep={collapsedSection !== "payment"}
-            handleEnroll={handleEnroll}
-          />
-        )}
-        {!user && <UnauthenticationWarning />}
-      </section>
-    </section>
+            <TimeSlotSection
+              handleChooseTimeSlot={handleChooseTimeSlot}
+              timeSlots={timeSlots}
+              selectedOptions={selectedOptions}
+            />
+          </section>
+          <section>
+            <EnrollTypeHeader
+              isCollapsed={collapsedSection === "sessionType"}
+              step={3}
+              stepLabel="Session Type"
+            />
+            <SesstionTypeSection
+              sessions={sessions}
+              handleChooseSessionType={hadnleChooseSessionType}
+              selectedOptions={selectedOptions}
+            />
+          </section>
+          <section>
+            {!user?.profileComplete ? (
+              <IncompleteAccountWarning />
+            ) : (
+              <TotalPriceSection
+                sessionPrice={priceModifier}
+                basePrice={basePrice}
+                totalPrice={totalPrice}
+                isLastStep={collapsedSection !== "payment"}
+                handleEnroll={handleEnroll}
+              />
+            )}
+            {!user && <UnauthenticationWarning />}
+          </section>
+        </section>
+      )}
+    </>
   );
 }
