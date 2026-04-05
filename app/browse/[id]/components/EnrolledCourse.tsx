@@ -3,6 +3,7 @@ import { CourseEnrollmentDetailsType } from "../types";
 import CheckMarkIcon from "@/public/CheckMark.svg";
 import Image from "next/image";
 import RepeatIcon from "@/public/Repeat.svg";
+import ProgressBar from "@/shared/components/ProgressBar";
 
 interface EnrolledCourseProps {
   enrollment: CourseEnrollmentDetailsType;
@@ -32,17 +33,7 @@ export default function EnrolledCourse({
         <li>{enrollment.schedule.sessionType.location}</li>
       </ul>
 
-      <div className="space-y-3">
-        <p className="text-sm text-dark-gray font-medium">
-          {enrollment.progress}% completed
-        </p>
-        <div className="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-primary-purple transition-all rounded-r-full duration-300"
-            style={{ width: `${enrollment.progress}%` }}
-          />
-        </div>
-      </div>
+      <ProgressBar percentage={enrollment.progress} />
 
       {enrollment.progress !== 100 ? (
         <Button
