@@ -49,7 +49,7 @@ export default function SignInModal() {
   };
 
   return (
-    <div className="w-full max-w-115 relative z-50 bg-white rounded-xl">
+    <div className="w-full max-w-115 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-white rounded-xl inset-0">
       <div
         className=" absolute cursor-pointer top-5 right-3.75"
         onClick={closeModal}
