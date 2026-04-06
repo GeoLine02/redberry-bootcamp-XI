@@ -74,7 +74,7 @@ function Trigger({ children, className, disabled }: TriggerProps) {
       disabled={disabled}
       onClick={toggle}
       className={clsx(
-        "w-full border-2 border-border-gray rounded-lg px-4 py-4 text-left bg-light-gray flex justify-between items-center mt-0.5",
+        "w-full border-2 border-border-gray rounded-lg px-4 py-4 text-left bg-light-gray flex justify-between items-center mt-0.5 cursor-pointer",
         className,
       )}
     >
