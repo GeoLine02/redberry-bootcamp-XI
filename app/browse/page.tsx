@@ -15,7 +15,7 @@ export default async function Browse() {
   const categoryFilters = await getCategoryFilters();
 
   const topicFilters = await getTopicFilters();
-
+  console.log(topicFilters);
   const instructorFilters = await getIntructorFilters();
 
   return (
@@ -31,8 +31,8 @@ export default async function Browse() {
       </div>
       <BrowseClient
         categoryFilters={categoryFilters.data}
-        instructorFilters={instructorFilters}
-        topicFilters={topicFilters}
+        instructorFilters={instructorFilters.data}
+        topicFilters={topicFilters.data}
         coursesData={initialCourses}
       />
     </div>

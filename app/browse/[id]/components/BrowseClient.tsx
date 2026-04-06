@@ -1,7 +1,7 @@
 "use client";
 
 import { CoursesWithPagination, CourseType } from "@/shared/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getCourses } from "../../services";
 import CoursesList from "../../components/CoursesList";
 import Filters from "../../components/Filters";
@@ -9,6 +9,7 @@ import DropDown from "@/ui/DropDown";
 import {
   CategoryFilterType,
   InstructorFIlterType,
+  SelectedCourseFiltersType,
   SortType,
   TopicFilterType,
 } from "../../types";
@@ -33,6 +34,13 @@ export default function BrowseClient({
   const [lastPage, setLastPage] = useState(coursesData.meta.lastPage);
   const [perPage, setPerPage] = useState(coursesData.meta.perPage);
   const [totalPages, setTotalPages] = useState(coursesData.meta.total);
+
+  const [selectedFilters, setSelectedFilters] =
+    useState<SelectedCourseFiltersType>({
+      selectedCategoryIds: [],
+      selectedInstructorIds: [],
+      selectedTopicIds: [],
+    });
   const [selectedSort, setSelectedSort] = useState<SortType | null>(null);
   const handleChangePage = async (page: number) => {
     try {
@@ -61,6 +69,44 @@ export default function BrowseClient({
     }
   };
 
+  const handleClearFilters = () => {
+    setSelectedFilters({
+      selectedCategoryIds: [],
+      selectedInstructorIds: [],
+      selectedTopicIds: [],
+    });
+  };
+
+  useEffect(() => {
+    const handleFilterCourses = async () => {
+      try {
+        const res = await getCourses(
+          1,
+          selectedSort?.value,
+          "",
+          selectedFilters.selectedCategoryIds,
+          selectedFilters.selectedTopicIds,
+          selectedFilters.selectedInstructorIds,
+        );
+        console.log(res);
+        setCourses(res.data);
+        setCurrentPage(res.meta.currentPage);
+        setLastPage(res.meta.lastPage);
+        setPerPage(res.meta.perPage);
+        setTotalPages(res.meta.total);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    handleFilterCourses();
+  }, [
+    selectedFilters.selectedCategoryIds,
+    selectedFilters.selectedInstructorIds,
+    selectedFilters.selectedTopicIds,
+    selectedSort?.value,
+  ]);
+
   return (
     <div>
       <div className="flex gap-22.5 mt-8.5">
@@ -68,6 +114,9 @@ export default function BrowseClient({
           categoryFilters={categoryFilters}
           instructorFilters={instructorFilters}
           topicFilters={topicFilters}
+          selectedFilters={selectedFilters}
+          setSelectedFilters={setSelectedFilters}
+          handleClearFilters={handleClearFilters}
         />
         <div className="flex flex-col gap-8 items-center">
           <div className="w-full flex items-center justify-between">
