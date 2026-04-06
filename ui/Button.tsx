@@ -10,7 +10,7 @@ const buttonVariants = cva(
     "rounded-lg font-medium",
     "transition-all duration-300",
     "focus:outline-none focus:ring-2 focus:ring-primary-purple",
-    "disabled:pointer-events-none disabled:opacity-50",
+    "disabled:pointer-events-none disabled:bg-light-purple disabled:text-primary-purple/50 disabled:font-semibold",
     "max-w-auto w-fit",
   ],
   {

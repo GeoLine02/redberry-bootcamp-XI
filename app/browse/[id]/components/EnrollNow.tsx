@@ -5,7 +5,6 @@ import ArrowDownIcon from "@/public/ArrowDown.svg";
 import ArrowUpIcon from "@/public/ArrowUp.svg";
 import {
   CourseEnrollmentDetailsType,
-  CourseEnrollmentType,
   SessionType,
   TimeSlotType,
   WeeklyScheduleType,
@@ -32,11 +31,11 @@ import EnrolledCourse from "./EnrolledCourse";
 interface EnrollTypeHeaderProps {
   step: number;
   stepLabel: string;
-  isCollapsed: boolean;
+  isAccessible: boolean;
 }
 
 const EnrollTypeHeader = ({
-  isCollapsed,
+  isAccessible,
   step,
   stepLabel,
 }: EnrollTypeHeaderProps) => {
@@ -44,17 +43,17 @@ const EnrollTypeHeader = ({
     <div className="cursor-pointer flex items-center justify-between">
       <div className="flex items-center gap-2 w-full">
         <div
-          className={`${isCollapsed ? "border-dark-puple text-dark-puple" : "border-medium-gray text-medium-gray"} border-2 rounded-full w-7 aspect-square font-medium text-center`}
+          className={`${isAccessible ? "border-dark-puple text-dark-puple" : "border-medium-gray text-medium-gray"} border-2 rounded-full w-7 aspect-square font-medium text-center`}
         >
           {step}
         </div>
         <h1
-          className={`${isCollapsed ? "border-dark-puple text-dark-puple" : "border-medium-gray text-medium-gray"} text-2xl font-semibold`}
+          className={`${isAccessible ? "border-dark-puple text-dark-puple" : "border-medium-gray text-medium-gray"} text-2xl font-semibold`}
         >
           {stepLabel}
         </h1>
       </div>
-      {isCollapsed ? (
+      {isAccessible ? (
         <Image
           src={ArrowDownIcon}
           alt="arrow down"
@@ -111,6 +110,8 @@ export default function EnrollNow({
       ...prev,
       weeklyScheduleId: scheduleId,
     }));
+
+    setCollapsedSection("timeSlots");
   };
 
   const handleChooseTimeSlot = (timeSlotId: number) => {
@@ -148,7 +149,15 @@ export default function EnrollNow({
         return;
       }
       const res = await enrollOnCourse(courseId, selectedOptions, false);
+      console.log("@@@", res.data);
       setEnrolledCourse(res.data);
+      setSelectedOptons({
+        courseScheduleId: null,
+        sessionTypeId: null,
+        timeSlotId: null,
+        weeklyScheduleId: null,
+      });
+      setCollapsedSection("weeklySchedules");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.log(error.response.data);
@@ -159,7 +168,7 @@ export default function EnrollNow({
       if (!enrolledCourse) return;
 
       const res = await completeEnrollment(enrolledCourse.id);
-
+      console.log(res.data);
       setEnrolledCourse(res.data);
     } catch (error) {
       console.log(error);
@@ -168,18 +177,12 @@ export default function EnrollNow({
 
   const retakeEnrollment = async () => {
     if (!enrolledCourse) return; // ⭐ IMPORTANT
-
+    console.log(enrolledCourse.id);
     try {
       const res = await retakeCourse(enrolledCourse.id);
-
-      setEnrolledCourse((prev) =>
-        prev
-          ? {
-              ...prev,
-              progress: res.data.progress,
-            }
-          : prev,
-      );
+      if (res) {
+        setEnrolledCourse(null);
+      }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.log(error.response?.data);
@@ -215,7 +218,6 @@ export default function EnrollNow({
         );
 
         setSessions(res.data);
-        setCollapsedSection("payment");
       } catch (err) {
         console.log(err);
       }
@@ -225,6 +227,8 @@ export default function EnrollNow({
   }, [courseId, selectedOptions.weeklyScheduleId, selectedOptions.timeSlotId]);
 
   const totalPrice = Number(basePrice) + Number(priceModifier);
+
+  console.log("%%%%%%", collapsedSection);
 
   return (
     <>
@@ -238,7 +242,12 @@ export default function EnrollNow({
         <section className="space-y-8 w-full  max-w-132.5">
           <section>
             <EnrollTypeHeader
-              isCollapsed={collapsedSection === "weeklySchedules"}
+              isAccessible={
+                collapsedSection === "weeklySchedules" ||
+                collapsedSection === "timeSlots" ||
+                collapsedSection === "sessionType" ||
+                collapsedSection === "payment"
+              }
               step={1}
               stepLabel="Select Weekly Schedule"
             />
@@ -251,7 +260,10 @@ export default function EnrollNow({
           </section>
           <section>
             <EnrollTypeHeader
-              isCollapsed={collapsedSection === "timeSlots"}
+              isAccessible={
+                collapsedSection === "timeSlots" ||
+                collapsedSection === "sessionType"
+              }
               step={2}
               stepLabel="Time Slot"
             />
@@ -264,7 +276,10 @@ export default function EnrollNow({
           </section>
           <section>
             <EnrollTypeHeader
-              isCollapsed={collapsedSection === "sessionType"}
+              isAccessible={
+                collapsedSection === "sessionType" ||
+                collapsedSection === "payment"
+              }
               step={3}
               stepLabel="Session Type"
             />

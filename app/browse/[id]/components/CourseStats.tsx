@@ -27,7 +27,7 @@ export default function CourseStats({
     <div className="max-w-225.75 space-y-2">
       <h1 className="text-[40px] font-semibold">{title}</h1>
       <Image
-        className="w-full max-w-225.75 object-cover rounded-[10px]"
+        className="w-full max-w-225.75 max-h-118.5 object-cover rounded-[10px]"
         width={903}
         height={474}
         src={image}

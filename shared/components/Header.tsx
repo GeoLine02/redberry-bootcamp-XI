@@ -23,7 +23,7 @@ export default async function Header() {
               </Link>
             </li>
 
-            <AuthButtons enrolledCourses={enrolledCourses?.data ?? []} />
+            <AuthButtons enrolledCourses={enrolledCourses.data} />
           </ul>
         </nav>
       </div>
