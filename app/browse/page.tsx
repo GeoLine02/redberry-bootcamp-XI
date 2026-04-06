@@ -11,7 +11,7 @@ import BrowseClient from "./[id]/components/BrowseClient";
 
 export default async function Browse() {
   const initialCourses = await getCourses();
-
+  console.log(initialCourses);
   const categoryFilters = await getCategoryFilters();
 
   const topicFilters = await getTopicFilters();
@@ -30,7 +30,7 @@ export default async function Browse() {
         </Link>
       </div>
       <BrowseClient
-        categoryFilters={categoryFilters}
+        categoryFilters={categoryFilters.data}
         instructorFilters={instructorFilters}
         topicFilters={topicFilters}
         coursesData={initialCourses}
