@@ -66,7 +66,7 @@ export async function completeEnrollment(enrollmentId: number) {
 export async function retakeCourse(enrollmentId: number) {
   try {
     const res = await axios.delete(`/api/enrollments/${enrollmentId}/retake`);
-    return res.data;
+    return res.status === 204;
   } catch (error) {
     throw error;
   }

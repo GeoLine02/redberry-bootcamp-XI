@@ -19,13 +19,17 @@ export async function DELETE(
     {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
     },
   );
 
-  const data = await res.json();
+  // ✅ If API returns 204, return empty response
+  if (res.status === 204) {
+    return new NextResponse(null, { status: 204 });
+  }
 
+  // otherwise parse normally
+  const data = await res.json();
   return NextResponse.json(data, { status: res.status });
 }
