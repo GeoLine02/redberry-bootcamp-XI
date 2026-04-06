@@ -10,12 +10,26 @@ export async function getCourses(
   page?: number,
   sort?: SortValueType,
   search?: string,
+  categoryFilters?: number[],
+  topicFilters?: number[],
+  instructorFilters?: number[],
 ) {
   try {
     const query = new URLSearchParams();
     query.append("page", String(page ?? 1));
     if (search) query.append("search", search);
     if (sort) query.append("sort", sort);
+
+    // Categories
+    categoryFilters?.forEach((id) => query.append("categories[]", String(id)));
+
+    // Topics
+    topicFilters?.forEach((id) => query.append("topics[]", String(id)));
+
+    // Instructors
+    instructorFilters?.forEach((id) =>
+      query.append("instructors[]", String(id)),
+    );
 
     const res = await api.get(`/courses?${query.toString()}`);
     return res.data;

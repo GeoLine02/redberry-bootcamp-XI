@@ -22,3 +22,9 @@ export interface InstructorFIlterType {
   name: string;
   avatar: string;
 }
+
+export interface SelectedCourseFiltersType {
+  selectedCategoryIds: number[];
+  selectedTopicIds: number[];
+  selectedInstructorIds: number[];
+}
