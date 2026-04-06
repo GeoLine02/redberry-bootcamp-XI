@@ -17,7 +17,7 @@ export async function getCourses(
     if (search) query.append("search", search);
     if (sort) query.append("sort", sort);
 
-    const res = await api.get(`/api/courses?${query.toString()}`);
+    const res = await api.get(`/courses?${query.toString()}`);
     return res.data;
   } catch (error) {
     throw error;
@@ -27,6 +27,7 @@ export async function getCourses(
 export async function getCategoryFilters() {
   try {
     const res = await api.get("/categories");
+    console.log(res);
     return res.data;
   } catch (error) {
     throw error;
