@@ -23,11 +23,11 @@ export default function TotalPriceSection({
       <div className="mt-8 space-y-2">
         <div className="flex w-full items-center justify-between font-medium">
           <h2 className="text-medium-gray">Base price</h2>
-          <h2>+${basePrice}</h2>
+          <h2>+ ${basePrice}</h2>
         </div>
         <div className="flex w-full items-center justify-between font-medium">
           <h2 className="text-medium-gray">Session Type</h2>
-          <h2>+${sessionPrice}</h2>
+          <h2>+ ${sessionPrice ? sessionPrice : "0.00"}</h2>
         </div>
       </div>
       <Button

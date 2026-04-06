@@ -26,7 +26,7 @@ export default function CourseCard({
   weeks,
 }: CourseCardProps) {
   return (
-    <div className="bg-white rounded-xl p-5 max-w-126.5 flex flex-col gap-4">
+    <div className="bg-white rounded-xl p-5 max-w-126.5 flex flex-col gap-4 cursor-pointer border border-white hover:border-primary-purple hover:shadow-2xl transition-all duration-500">
       <Image
         width={333}
         height={181}
