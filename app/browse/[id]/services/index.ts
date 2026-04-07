@@ -1,6 +1,7 @@
 import api from "@/utils/axios";
 import { SelectedOptions } from "../components/Enrollment";
 import axios from "axios";
+import { EnrollmentType } from "@/shared/types";
 
 export async function getSessionTypes(
   courseId: number,
@@ -37,13 +38,18 @@ export async function getWeeklySchedules(courseId: number) {
   }
 }
 
+export interface EnrollOnCourseResponse {
+  data: EnrollmentType;
+  message: string;
+}
+
 export async function enrollOnCourse(
   courseId: number,
   selectedOptions: SelectedOptions,
   force: boolean,
-) {
+): Promise<EnrollOnCourseResponse> {
   try {
-    const res = await axios.post("/api/enrollments", {
+    const res = await axios.post<EnrollOnCourseResponse>("/api/enrollments", {
       courseId: courseId,
       courseScheduleId: selectedOptions.courseScheduleId,
       force: force,

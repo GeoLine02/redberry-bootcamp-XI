@@ -77,7 +77,7 @@ export interface Schedule {
   location: string;
 }
 
-export interface Enrollment {
+export interface EnrollmentType {
   id: number;
   quantity: number;
   totalPrice: number;

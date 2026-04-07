@@ -11,11 +11,9 @@ import BrowseClient from "./[id]/components/BrowseClient";
 
 export default async function Browse() {
   const initialCourses = await getCourses();
-  console.log(initialCourses);
   const categoryFilters = await getCategoryFilters();
 
   const topicFilters = await getTopicFilters();
-  console.log(topicFilters);
   const instructorFilters = await getIntructorFilters();
 
   return (

@@ -6,16 +6,14 @@ import SignUpModal from "./auth/SignUpModal";
 import { useUser } from "@/provider/UserProvider";
 import UserPreview from "./UserPreview";
 import EnrolledCoursesModal from "./EnrolledCoursesModal";
-import { Enrollment } from "../types";
 import { useModal } from "@/provider/ModalProvider";
+import { useEnrollments } from "@/provider/EnrollmentsProvider";
 
-interface AuthButtonsProps {
-  enrolledCourses: Enrollment[];
-}
-
-export default function AuthButtons({ enrolledCourses }: AuthButtonsProps) {
+export default function AuthButtons() {
   const { openModal } = useModal();
   const { user } = useUser();
+
+  const { enrolledCourses } = useEnrollments();
 
   return (
     <>

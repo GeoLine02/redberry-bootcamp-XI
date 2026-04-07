@@ -32,7 +32,6 @@ export default function BrowseClient({
   const [courses, setCourses] = useState<CourseType[]>(coursesData.data ?? []);
   const [currentPage, setCurrentPage] = useState(coursesData.meta.currentPage);
   const [lastPage, setLastPage] = useState(coursesData.meta.lastPage);
-  const [perPage, setPerPage] = useState(coursesData.meta.perPage);
   const [totalPages, setTotalPages] = useState(coursesData.meta.total);
 
   const [selectedFilters, setSelectedFilters] =
@@ -48,7 +47,6 @@ export default function BrowseClient({
       setCourses(res.data);
       setCurrentPage(res.meta.currentPage);
       setLastPage(res.meta.lastPage);
-      setPerPage(res.meta.perPage);
       setTotalPages(res.meta.total);
     } catch (error) {
       console.log(error);
@@ -61,7 +59,6 @@ export default function BrowseClient({
       setCourses(res.data);
       setCurrentPage(res.meta.currentPage);
       setLastPage(res.meta.lastPage);
-      setPerPage(res.meta.perPage);
       setTotalPages(res.meta.total);
       setSelectedSort(sortOption);
     } catch (error) {
@@ -92,7 +89,6 @@ export default function BrowseClient({
         setCourses(res.data);
         setCurrentPage(res.meta.currentPage);
         setLastPage(res.meta.lastPage);
-        setPerPage(res.meta.perPage);
         setTotalPages(res.meta.total);
       } catch (error) {
         console.log(error);
@@ -121,7 +117,7 @@ export default function BrowseClient({
         <div className="flex flex-col gap-8 items-center">
           <div className="w-full flex items-center justify-between">
             <span>
-              Showing {perPage} out of {totalPages}
+              Showing {courses.length} out of {totalPages}
             </span>
             <DropDown className="min-w-58.5 max-w-fit">
               <DropDown.Trigger className="bg-white border-0!">

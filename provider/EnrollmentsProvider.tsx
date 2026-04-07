@@ -1,21 +1,21 @@
 "use client";
 
-import { Enrollment } from "@/shared/types";
+import { getInprogressCourses } from "@/app/(home)/services";
+import { EnrollmentType } from "@/shared/types";
 import {
   createContext,
   useContext,
   useState,
-  useEffect,
   ReactNode,
   Dispatch,
   SetStateAction,
+  useEffect,
 } from "react";
 import { useUser } from "./UserProvider";
-import api from "@/utils/axios";
 
 interface EnrollmentsContextType {
-  enrollments: Enrollment[];
-  setEnrollments: Dispatch<SetStateAction<Enrollment[]>>;
+  enrolledCourses: EnrollmentType[];
+  setEnrolledCourses: Dispatch<SetStateAction<EnrollmentType[]>>;
   setError: Dispatch<SetStateAction<string | null>>;
   error: string | null;
 }
@@ -25,12 +25,28 @@ const EnrollmentsContext = createContext<EnrollmentsContextType | undefined>(
 );
 
 export const EnrollmentsProvider = ({ children }: { children: ReactNode }) => {
-  const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
+  const [enrolledCourses, setEnrolledCourses] = useState<EnrollmentType[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const { user } = useUser();
+
+  useEffect(() => {
+    const handleFetchEnrollments = async () => {
+      try {
+        const res = await getInprogressCourses();
+        console.log(res.data);
+        setEnrolledCourses(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (user) {
+      handleFetchEnrollments();
+    }
+  }, [user]);
 
   return (
     <EnrollmentsContext.Provider
-      value={{ enrollments, setEnrollments, setError, error }}
+      value={{ enrolledCourses, setEnrolledCourses, setError, error }}
     >
       {children}
     </EnrollmentsContext.Provider>

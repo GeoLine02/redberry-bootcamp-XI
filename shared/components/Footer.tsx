@@ -73,6 +73,16 @@ export default function Footer() {
           </section>
         </div>
       </div>
+      <div className="flex justify-between items-center container pb-5">
+        <p className="text-lg text-medium-gray">
+          Copyright © 2026 Redberry International
+        </p>
+        <p className="text-lg text-medium-gray">
+          All Rights Reserved |{" "}
+          <span className="text-primary-purple">Terms and Conditions</span> |{" "}
+          <span className="text-primary-purple">Privacy Policy</span>
+        </p>
+      </div>
     </footer>
   );
 }
