@@ -1,5 +1,5 @@
 import api from "@/utils/axios";
-import { SelectedOptions } from "../components/EnrollNow";
+import { SelectedOptions } from "../components/Enrollment";
 import axios from "axios";
 
 export async function getSessionTypes(
