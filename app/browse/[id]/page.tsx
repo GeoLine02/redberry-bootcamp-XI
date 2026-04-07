@@ -15,6 +15,7 @@ export default async function CourseDetails({ params }: CourseDetailsProps) {
   const resolvedParams = await params;
   const courseDetails = await getCourseDetails(Number(resolvedParams.id));
   const weeklySchedules = await getWeeklySchedules(Number(resolvedParams.id));
+  console.log(courseDetails);
   return (
     <div>
       <span className="flex items-center gap-1 font-medium text-[18px]">
@@ -44,6 +45,7 @@ export default async function CourseDetails({ params }: CourseDetailsProps) {
         <EnrollNow
           weeklySchedules={weeklySchedules.data}
           courseId={courseDetails.data.id}
+          isCourseRatedData={courseDetails.data.isRated}
           basePrice={courseDetails.data.basePrice}
           enrollment={courseDetails.data.enrollment}
         />

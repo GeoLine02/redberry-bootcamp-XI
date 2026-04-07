@@ -13,7 +13,7 @@ export async function fetchMe() {
 
 export async function signUp(formData: FormData) {
   try {
-    const res = await axios.post("api/auth/register", formData);
+    const res = await axios.post("/api/auth/register", formData);
     return res.data;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
