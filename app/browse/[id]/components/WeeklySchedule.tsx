@@ -1,5 +1,5 @@
 import { WeeklyScheduleType } from "../types";
-import { SelectedOptions } from "./EnrollNow";
+import { SelectedOptions } from "./Enrollment";
 
 interface WeeklyScheduleProps {
   weeklySchedules: WeeklyScheduleType[];

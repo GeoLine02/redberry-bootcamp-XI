@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { SessionType } from "../types";
-import { SelectedOptions } from "./EnrollNow";
+import { SelectedOptions } from "./Enrollment";
 import WarrningIcon from "@/public/Warning.svg";
 
 interface SessionTypeSectionProps {

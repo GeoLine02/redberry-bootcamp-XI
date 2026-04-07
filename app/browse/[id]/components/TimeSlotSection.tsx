@@ -1,5 +1,5 @@
 import { TimeSlotType } from "../types";
-import { SelectedOptions } from "./EnrollNow";
+import { SelectedOptions } from "./Enrollment";
 
 interface TimeSlotSectionProps {
   timeSlots: TimeSlotType[];
