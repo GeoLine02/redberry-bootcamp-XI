@@ -18,7 +18,7 @@ export default async function CourseDetails({ params }: CourseDetailsProps) {
   console.log(courseDetails);
   return (
     <div>
-      <span className="flex items-center gap-1 font-medium text-[18px]">
+      <span className="flex items-center gap-1 font-medium text-[18px] mt-16 mb-8">
         <Link href={"/"} className="">
           Home
         </Link>
@@ -27,9 +27,9 @@ export default async function CourseDetails({ params }: CourseDetailsProps) {
           Browse
         </Link>
         <Image src={ArrowOutlined} alt="arrow" />
-        {/* <Link href={`/browse/}`} className="text-primary-purple">
-          courseTitle
-        </Link> */}
+        <Link href={`/browse/}`} className="text-primary-purple">
+          {courseDetails.data.category.name}
+        </Link>
       </span>
       <div className="flex gap-33.25">
         <CourseStats

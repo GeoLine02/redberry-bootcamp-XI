@@ -1,6 +1,6 @@
-import { Enrollment } from "@/shared/types";
+import { EnrollmentType } from "@/shared/types";
 
-export const dummyEnrollments: Enrollment[] = [
+export const dummyEnrollments: EnrollmentType[] = [
   {
     id: 1,
     quantity: 1,

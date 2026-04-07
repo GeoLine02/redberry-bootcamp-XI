@@ -1,11 +1,8 @@
 import Logo from "@/ui/Logo";
 import Link from "next/link";
 import AuthButtons from "./AuthButtons";
-import { getInprogressCourses } from "@/app/(home)/services/index.server";
 
 export default async function Header() {
-  const enrolledCourses = await getInprogressCourses();
-
   return (
     <header className="border-b border-border-gray">
       <div className="flex items-center  justify-between py-6 container">
@@ -37,7 +34,7 @@ export default async function Header() {
               </Link>
             </li>
 
-            <AuthButtons enrolledCourses={enrolledCourses?.data ?? []} />
+            <AuthButtons />
           </ul>
         </nav>
       </div>

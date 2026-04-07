@@ -13,6 +13,7 @@ import IncompleteAccountModal from "./IncompleteAccountModal";
 import { useModal } from "@/provider/ModalProvider";
 import { useUser } from "@/provider/UserProvider";
 import useEnrollmentForm from "../hooks/useEnrollmentForm";
+import EnrollmentConfilctModal from "./EnrollmentConfilctModal";
 
 interface EnrollmentFormProps {
   courseId: number;
@@ -62,7 +63,19 @@ export default function EnrollmentForm({
       resetForm();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      if (error.message) console.log(error.message);
+      console.log(error.response);
+
+      if (error?.response.data.message === "Schedule conflict detected") {
+        openModal(
+          <EnrollmentConfilctModal
+            selectedOptions={selectedOptions}
+            enrollOnCourse={enrollOnCourse}
+            conflicts={error.response.data.conflicts}
+            courseId={courseId}
+            setEnrolledCourse={setEnrolledCourse}
+          />,
+        );
+      }
     }
   };
 

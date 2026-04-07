@@ -1,23 +1,66 @@
 import Image from "next/image";
 import WarningIcon from "@/public/Warning.svg";
 import { Button } from "@/ui/Button";
+import { CourseEnrollmentDetailsType, EnrollmentConflictType } from "../types";
+import { SelectedOptions } from "./Enrollment";
+import { EnrollOnCourseResponse } from "../services";
+import { useModal } from "@/provider/ModalProvider";
+import { Dispatch, SetStateAction } from "react";
 
-export default function EnrollmentConfilctModal() {
+interface EnrollmentConfilctModalProps {
+  conflicts: EnrollmentConflictType[];
+  selectedOptions: SelectedOptions;
+  courseId: number;
+  enrollOnCourse(
+    courseId: number,
+    selectedOptions: SelectedOptions,
+    force: boolean,
+  ): Promise<EnrollOnCourseResponse>;
+  setEnrolledCourse: Dispatch<
+    SetStateAction<CourseEnrollmentDetailsType | null>
+  >;
+}
+
+export default function EnrollmentConfilctModal({
+  conflicts,
+  enrollOnCourse,
+  courseId,
+  selectedOptions,
+  setEnrolledCourse,
+}: EnrollmentConfilctModalProps) {
+  const { closeModal } = useModal();
+
+  const forceEnrollment = async () => {
+    try {
+      const res = await enrollOnCourse(courseId, selectedOptions, true);
+
+      setEnrolledCourse(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-50 pointer-events-none flex items-center justify-center">
-      <div className="bg-white border border-border-gray p-15 flex flex-col items-center gap-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div className="bg-white border border-border-gray max-w-119 p-15 flex flex-col items-center gap-6 rounded-xl">
         <Image width={94} height={94} src={WarningIcon} alt="warning" />
 
-        <h1 className="text-customBlack font-semibold text-[32px]">
-          Enrollment Conflict
+        <h1 className="text-dark-gray font-semibold text-[32px]">
+          Enrollment Conflict!
         </h1>
-        <p className="text-xl font-medium">
-          You are already enrolled in “UX/UI Design Fundamentals” with the same
-          schedule: Wed-Fri at 12AM-2PM
-        </p>
+        {conflicts.map((conflict, index) => (
+          <p key={index} className="text-xl font-medium text-center">
+            You are already enrolled in “{conflict.conflictingCourseName}” with
+            the same schedule: {conflict.schedule}
+          </p>
+        ))}
         <div className="flex gap-2 items-center">
-          <Button variant={"outline"}>Continue Anyway</Button>
-          <Button variant={"primary"}>Cancel</Button>
+          <Button onClick={forceEnrollment} variant={"outline"}>
+            Continue Anyway
+          </Button>
+          <Button onClick={closeModal} variant={"primary"}>
+            Cancel
+          </Button>
         </div>
       </div>
     </div>

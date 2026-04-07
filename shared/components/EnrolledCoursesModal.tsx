@@ -1,12 +1,12 @@
 import Image from "next/image";
-import { Enrollment } from "../types";
+import { EnrollmentType } from "../types";
 import StartrIcon from "@/public/Star.svg";
 import ProgressBar from "./ProgressBar";
 import { Button } from "@/ui/Button";
 import { useEffect, useState } from "react";
 
 interface EnrolledCourseCardProps {
-  enrolledCourse: Enrollment;
+  enrolledCourse: EnrollmentType;
 }
 
 const EnrolledCourseCard = ({ enrolledCourse }: EnrolledCourseCardProps) => {
@@ -52,7 +52,7 @@ const EnrolledCourseCard = ({ enrolledCourse }: EnrolledCourseCardProps) => {
 };
 
 interface Props {
-  enrolledCourses: Enrollment[];
+  enrolledCourses: EnrollmentType[];
   open?: boolean; // injected by Modal
 }
 

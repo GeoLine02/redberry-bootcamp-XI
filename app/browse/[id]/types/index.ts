@@ -82,3 +82,10 @@ export interface CourseEnrollmentDetailsType {
     sessionType: SessionType;
   };
 }
+
+export interface EnrollmentConflictType {
+  requestedCourseId: number;
+  conflictingEnrollmentId: number;
+  conflictingCourseName: string;
+  schedule: string;
+}
