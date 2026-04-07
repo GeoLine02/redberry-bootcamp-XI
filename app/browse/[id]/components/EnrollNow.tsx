@@ -17,6 +17,7 @@ import {
   enrollOnCourse,
   getSessionTypes,
   getTimeSlots,
+  rateCourse,
   retakeCourse,
 } from "../services";
 import SesstionTypeSection from "./SesstionTypeSection";
@@ -24,9 +25,12 @@ import TotalPriceSection from "./TotalPriceSection";
 import { useUser } from "@/provider/UserProvider";
 import { useModal } from "@/provider/ModalProvider";
 import SignInModal from "@/shared/components/auth/SignInModal";
-import IncompleteAccountWarning from "./IncompleteAccountWarning";
+import IncompleteAccountWarning from "./IncompleteAccuntWarning";
 import UnauthenticationWarning from "./UnauthenticationWarning";
 import EnrolledCourse from "./EnrolledCourse";
+import IncompleteAccountModal from "./IncompleteAccountModal";
+import CompleteCourseModal from "./CompleteCourseModal";
+import RateCourse from "./RateCourse";
 
 interface EnrollTypeHeaderProps {
   step: number;
@@ -75,6 +79,7 @@ interface EnrollNowProps {
   courseId: number;
   basePrice: number;
   enrollment: CourseEnrollmentDetailsType;
+  isCourseRatedData: boolean;
 }
 
 export interface SelectedOptions {
@@ -89,6 +94,7 @@ export default function EnrollNow({
   courseId,
   basePrice,
   enrollment,
+  isCourseRatedData,
 }: EnrollNowProps) {
   const { user } = useUser();
   const [collapsedSection, setCollapsedSection] = useState<
@@ -102,6 +108,10 @@ export default function EnrollNow({
     sessionTypeId: null,
     timeSlotId: null,
   });
+  console.log("!!!!!!", isCourseRatedData);
+  const [isCourseRated, setIsCourseRated] = useState(isCourseRatedData);
+  console.log("@@@@", isCourseRated);
+  const [courseRating, setCourseRating] = useState(0);
   const [enrolledCourse, setEnrolledCourse] =
     useState<CourseEnrollmentDetailsType | null>(enrollment || null);
   const [priceModifier, setPriceModifier] = useState<number | null>(null);
@@ -113,6 +123,8 @@ export default function EnrollNow({
 
     setCollapsedSection("timeSlots");
   };
+
+  console.log("courseRating", courseRating);
 
   const handleChooseTimeSlot = (timeSlotId: number) => {
     setSelectedOptons((prev) => ({
@@ -148,6 +160,12 @@ export default function EnrollNow({
         openModal(<SignInModal />);
         return;
       }
+
+      if (!user.profileComplete) {
+        openModal(<IncompleteAccountModal />);
+        return;
+      }
+
       const res = await enrollOnCourse(courseId, selectedOptions, false);
       console.log("@@@", res.data);
       setEnrolledCourse(res.data);
@@ -160,7 +178,9 @@ export default function EnrollNow({
       setCollapsedSection("weeklySchedules");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.log(error.response.data);
+      if (error.message) {
+        console.log(error.message);
+      }
     }
   };
   const handleCompleteEnrollment = async () => {
@@ -170,6 +190,14 @@ export default function EnrollNow({
       const res = await completeEnrollment(enrolledCourse.id);
       console.log(res.data);
       setEnrolledCourse(res.data);
+      openModal(
+        <CompleteCourseModal
+          isCourseRated={isCourseRated}
+          rating={courseRating}
+          handleRateCourse={handleRateCourse}
+          courseTitle={enrolledCourse.course.title}
+        />,
+      );
     } catch (error) {
       console.log(error);
     }
@@ -177,11 +205,23 @@ export default function EnrollNow({
 
   const retakeEnrollment = async () => {
     if (!enrolledCourse) return; // ⭐ IMPORTANT
-    console.log(enrolledCourse.id);
     try {
       const res = await retakeCourse(enrolledCourse.id);
       if (res) {
         setEnrolledCourse(null);
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.log(error.response?.data);
+    }
+  };
+  const handleRateCourse = async (rating: number) => {
+    try {
+      const res = await rateCourse(courseId, rating);
+
+      if (res.data) {
+        setCourseRating(res.data.rating);
+        setIsCourseRated(true);
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -227,8 +267,6 @@ export default function EnrollNow({
   }, [courseId, selectedOptions.weeklyScheduleId, selectedOptions.timeSlotId]);
 
   const totalPrice = Number(basePrice) + Number(priceModifier);
-
-  console.log("%%%%%%", collapsedSection);
 
   return (
     <>
@@ -289,17 +327,27 @@ export default function EnrollNow({
               selectedOptions={selectedOptions}
             />
           </section>
-          <section>
-            {!user?.profileComplete ? (
-              <IncompleteAccountWarning />
+          <section className="space-y-6">
+            <TotalPriceSection
+              sessionPrice={priceModifier}
+              basePrice={basePrice}
+              totalPrice={totalPrice}
+              isLastStep={collapsedSection !== "payment"}
+              handleEnroll={handleEnroll}
+            />
+            {user && !user?.profileComplete && <IncompleteAccountWarning />}
+            {isCourseRated ? (
+              <p>You&apos;ve already rated this course</p>
             ) : (
-              <TotalPriceSection
-                sessionPrice={priceModifier}
-                basePrice={basePrice}
-                totalPrice={totalPrice}
-                isLastStep={collapsedSection !== "payment"}
-                handleEnroll={handleEnroll}
-              />
+              <div className="bg-white rounded-xl p-15 flex flex-col items-center gap-4.5 w-full">
+                <h1 className="font-medium text-dark-gray">
+                  Rate your experience
+                </h1>
+                <RateCourse
+                  rating={courseRating}
+                  handleRateCourse={handleRateCourse}
+                />
+              </div>
             )}
             {!user && <UnauthenticationWarning />}
           </section>

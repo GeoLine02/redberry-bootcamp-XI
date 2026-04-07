@@ -71,3 +71,14 @@ export async function retakeCourse(enrollmentId: number) {
     throw error;
   }
 }
+
+export async function rateCourse(courseId: number, rating: number) {
+  try {
+    const res = await axios.post(`/api/courses/${courseId}/reviews`, {
+      rating,
+    });
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}

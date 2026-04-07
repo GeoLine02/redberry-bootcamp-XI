@@ -79,13 +79,14 @@ export default function SignUpModal() {
       formData.append("avatar", data.image as File);
 
       const res = await signUp(formData);
-
+      console.log(res);
       setUser(res.data.user);
       localStorage.setItem("accessToken", res.data.token);
 
       closeModal();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
+      console.log(error.response);
       const firstMessage = Object.values(error.errors).flat()[0] as string;
       setError("root", { type: "server", message: firstMessage });
     }

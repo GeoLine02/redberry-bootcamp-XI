@@ -36,7 +36,6 @@ interface UserProviderProps {
 
 export default function UserProvider({ children }: UserProviderProps) {
   const [user, setUser] = useState<User | null>(null);
-  console.log("user", user);
   useEffect(() => {
     const fetchUser = async () => {
       const userData = await fetchMe();
