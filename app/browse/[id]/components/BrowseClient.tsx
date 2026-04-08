@@ -40,7 +40,10 @@ export default function BrowseClient({
       selectedInstructorIds: [],
       selectedTopicIds: [],
     });
-  const [selectedSort, setSelectedSort] = useState<SortType | null>(null);
+  const [selectedSort, setSelectedSort] = useState<SortType>({
+    label: "Newest",
+    value: "newest",
+  });
   const handleChangePage = async (page: number) => {
     try {
       const res = await getCourses(page);

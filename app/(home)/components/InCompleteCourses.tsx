@@ -79,7 +79,7 @@ export default function InCompleteCourses() {
 
   return (
     <>
-      {user && (
+      {user && enrolledCourses.length ? (
         <section>
           <div className="flex w-full justify-between items-baseline">
             <div>
@@ -93,7 +93,7 @@ export default function InCompleteCourses() {
               See All
             </button>
           </div>
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-3 mt-8 gap-6">
             {enrolledCourses.map((course) => (
               <InCompleteCourseCard
                 key={course.id}
@@ -108,7 +108,7 @@ export default function InCompleteCourses() {
             ))}
           </div>
         </section>
-      )}
+      ) : null}
     </>
   );
 }
