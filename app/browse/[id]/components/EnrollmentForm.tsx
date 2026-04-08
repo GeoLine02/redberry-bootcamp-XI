@@ -14,6 +14,7 @@ import { useModal } from "@/provider/ModalProvider";
 import { useUser } from "@/provider/UserProvider";
 import useEnrollmentForm from "../hooks/useEnrollmentForm";
 import EnrollmentConfilctModal from "./EnrollmentConfilctModal";
+import { useEnrollments } from "@/provider/EnrollmentsProvider";
 
 interface EnrollmentFormProps {
   courseId: number;
@@ -45,7 +46,7 @@ export default function EnrollmentForm({
     handleChooseSessionType,
     resetForm,
   } = useEnrollmentForm(courseId, basePrice);
-
+  const { setEnrolledCourses } = useEnrollments();
   const handleEnroll = async () => {
     try {
       if (!user) {
@@ -60,6 +61,7 @@ export default function EnrollmentForm({
 
       const res = await enrollOnCourse(courseId, selectedOptions, false);
       setEnrolledCourse(res.data);
+      setEnrolledCourses((prev) => [...prev, res.data]);
       resetForm();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

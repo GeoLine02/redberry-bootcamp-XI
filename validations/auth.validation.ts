@@ -14,7 +14,7 @@ export const signUpSchema = z
     username: z.string().min(3, "Username too short"),
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string(),
-    image: z.instanceof(File).nullable().optional(),
+    image: z.instanceof(File).optional().nullable(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],

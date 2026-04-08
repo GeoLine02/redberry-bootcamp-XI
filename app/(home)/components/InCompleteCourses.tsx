@@ -71,6 +71,12 @@ export default function InCompleteCourses() {
   const { enrolledCourses } = useEnrollments();
   const { user } = useUser();
 
+  const handleOpenEnrollmentsModal = () => {
+    if (enrolledCourses.length > 4) {
+      openModal(<EnrolledCoursesModal enrolledCourses={enrolledCourses} />);
+    }
+  };
+
   return (
     <>
       {user && (
@@ -81,11 +87,7 @@ export default function InCompleteCourses() {
               <p className="font-medium text-lg">Pick up where you left</p>
             </div>
             <button
-              onClick={() =>
-                openModal(
-                  <EnrolledCoursesModal enrolledCourses={enrolledCourses} />,
-                )
-              }
+              onClick={handleOpenEnrollmentsModal}
               className="border-b border-b-primary-purple cursor-pointer h-fit "
             >
               See All

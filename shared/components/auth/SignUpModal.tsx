@@ -86,7 +86,7 @@ export default function SignUpModal() {
       closeModal();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.log(error.response);
+      console.log(error.message);
       const firstMessage = Object.values(error.errors).flat()[0] as string;
       setError("root", { type: "server", message: firstMessage });
     }

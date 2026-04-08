@@ -28,6 +28,11 @@ export default function Filters({
   setSelectedFilters,
   handleClearFilters,
 }: FilterProps) {
+  const totalSelectedFilters =
+    selectedFilters.selectedCategoryIds.length +
+    selectedFilters.selectedInstructorIds.length +
+    selectedFilters.selectedTopicIds.length;
+
   return (
     <div className="w-full max-w-77.25">
       <div className="flex items-center justify-between">
@@ -66,6 +71,11 @@ export default function Filters({
             instructorFilters={instructorFilters}
           />
         </div>
+      </div>
+      <div className="border-t-2 border-t-border-gray mt-6 pt-4">
+        <span className="text-medium-gray">
+          {totalSelectedFilters} Filters Active
+        </span>
       </div>
     </div>
   );

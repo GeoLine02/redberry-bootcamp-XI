@@ -6,7 +6,7 @@ import Input from "@/ui/Input";
 import X from "@/public/X.svg";
 import { useModal } from "@/provider/ModalProvider";
 import { Button } from "@/ui/Button";
-import Upload from "@/ui/Uplaod";
+import Upload from "@/ui/Upload";
 import { useUser } from "@/provider/UserProvider";
 import { useEffect } from "react";
 import DropDown from "@/ui/DropDown";
@@ -108,7 +108,7 @@ export default function ProfileModal() {
               alt="avatar"
               width={56}
               height={56}
-              className="rounded-full object-cover"
+              className="rounded-full object-cover max-w-14 aspect-square"
             />
 
             <span
@@ -181,7 +181,9 @@ export default function ProfileModal() {
               name="age"
               render={({ field }) => (
                 <div>
-                  <label className="block mb-1 font-medium">Age</label>
+                  <label className="block mb-1 text-dark-gray font-medium">
+                    Age
+                  </label>
 
                   <DropDown>
                     <DropDown.Trigger className="w-full border rounded px-3 py-2 text-left">
@@ -213,7 +215,7 @@ export default function ProfileModal() {
 
           {/* Avatar */}
           <div>
-            <label>Upload Avatar</label>
+            <label className="inline-block mb-1">Upload Avatar</label>
             <Upload />
           </div>
 

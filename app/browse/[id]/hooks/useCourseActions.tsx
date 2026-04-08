@@ -3,6 +3,7 @@ import { completeEnrollment, rateCourse, retakeCourse } from "../services";
 import { CourseEnrollmentDetailsType } from "../types";
 import { useModal } from "@/provider/ModalProvider";
 import CompleteCourseModal from "../components/CompleteCourseModal";
+import { useEnrollments } from "@/provider/EnrollmentsProvider";
 
 interface UseCourseActionsParams {
   courseId: number;
@@ -19,7 +20,7 @@ export default function useCourseActions({
 }: UseCourseActionsParams) {
   const [isCourseRated, setIsCourseRated] = useState(isCourseRatedData);
   const [courseRating, setCourseRating] = useState(0);
-
+  const { setEnrolledCourses } = useEnrollments();
   const { openModal } = useModal();
 
   const retakeEnrollment = async () => {
@@ -51,6 +52,9 @@ export default function useCourseActions({
     try {
       const res = await completeEnrollment(enrolledCourse.id);
       setEnrolledCourse(res.data);
+      setEnrolledCourses((prev) =>
+        prev.filter((enrollment) => enrollment.id !== enrolledCourse.id),
+      );
       openModal(
         <CompleteCourseModal
           isCourseRated={isCourseRated}

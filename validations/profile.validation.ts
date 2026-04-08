@@ -5,6 +5,7 @@ export const profileSchema = z.object({
     .string()
     .min(1, "Name is required")
     .min(3, "Name must be at least 3 characters")
+    .max(50, "Name must be at lest 50 chracters")
     .max(50, "Name must not exceed 50 characters")
     .regex(/^[A-Za-z\u10A0-\u10FF\s]+$/, {
       message: "Name can contain only letters and spaces",
