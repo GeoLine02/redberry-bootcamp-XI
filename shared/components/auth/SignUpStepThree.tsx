@@ -1,5 +1,5 @@
 import Input from "@/ui/Input";
-import Upload from "@/ui/Uplaod";
+import Upload from "@/ui/Upload";
 import { SignUpFormValues } from "@/validations/auth.validation";
 import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 

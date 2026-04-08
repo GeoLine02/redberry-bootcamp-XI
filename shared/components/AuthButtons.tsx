@@ -15,17 +15,21 @@ export default function AuthButtons() {
 
   const { enrolledCourses } = useEnrollments();
 
+  const handleOpenEnrolledCourses = () => {
+    if (!user) {
+      openModal(<SignInModal />);
+    } else {
+      openModal(<EnrolledCoursesModal enrolledCourses={enrolledCourses} />);
+    }
+  };
+
   return (
     <>
       {user && (
         <>
           <li>
             <button
-              onClick={() =>
-                openModal(
-                  <EnrolledCoursesModal enrolledCourses={enrolledCourses} />,
-                )
-              }
+              onClick={handleOpenEnrolledCourses}
               className="flex gap-1 items-center hover:text-primary-purple hover:stroke-primary-purple transition-all duration-500"
             >
               <svg

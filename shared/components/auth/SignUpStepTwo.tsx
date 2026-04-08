@@ -16,9 +16,14 @@ export default function SignUpStepTwo({
   errors,
 }: SignUpStepTwoProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleShowRepeatPassword = () => {
+    setShowRepeatPassword(!showRepeatPassword);
   };
 
   return (
@@ -26,9 +31,11 @@ export default function SignUpStepTwo({
       <Input
         label="Password"
         {...register("password")}
-        type="password"
+        type={showPassword ? "text" : "password"}
         Icon={
           <Image
+            className="cursor-pointer"
+            onClick={handleShowPassword}
             src={showPassword ? EyeClosed : EyeIcon}
             alt="display password"
           />
@@ -41,11 +48,13 @@ export default function SignUpStepTwo({
       <Input
         label="Confirm Password"
         {...register("confirmPassword")}
-        type="password"
+        type={showRepeatPassword ? "text" : "password"}
         onClick={handleShowPassword}
         Icon={
           <Image
-            src={showPassword ? EyeClosed : EyeIcon}
+            className="cursor-pointer"
+            onClick={handleShowRepeatPassword}
+            src={showRepeatPassword ? EyeClosed : EyeIcon}
             alt="display password"
           />
         }

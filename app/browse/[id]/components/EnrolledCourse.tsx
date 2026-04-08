@@ -4,6 +4,10 @@ import CheckMarkIcon from "@/public/CheckMark.svg";
 import Image from "next/image";
 import RepeatIcon from "@/public/Repeat.svg";
 import ProgressBar from "@/shared/components/ProgressBar";
+import CalendarIcon from "@/public/Calendar.svg";
+import CLockIcon from "@/public/Clock.svg";
+import PersonsIcon from "@/public/PeopleIcon.svg";
+import LocationIcon from "@/public/Location.svg";
 
 interface EnrolledCourseProps {
   enrollment: CourseEnrollmentDetailsType;
@@ -27,10 +31,22 @@ export default function EnrolledCourse({
       </span>
 
       <ul className="space-y-5.5 text-dark-gray">
-        <li>{enrollment.schedule.weeklySchedule.label}</li>
-        <li>{enrollment.schedule.timeSlot.label}</li>
-        <li>{enrollment.schedule.sessionType.name}</li>
-        <li>{enrollment.schedule.sessionType.location}</li>
+        <li className="flex items-center gap-1">
+          <Image src={CalendarIcon} alt="" />
+          {enrollment.schedule.weeklySchedule.label}
+        </li>
+        <li className="flex items-center gap-1">
+          <Image src={CLockIcon} alt="" />
+          {enrollment.schedule.timeSlot.label}
+        </li>
+        <li className="flex items-center gap-1">
+          <Image src={PersonsIcon} alt="" />
+          {enrollment.schedule.sessionType.name}
+        </li>
+        <li className="flex items-center gap-1">
+          <Image src={LocationIcon} alt="" />
+          {enrollment.schedule.sessionType.location || "N/A"}
+        </li>
       </ul>
 
       <ProgressBar percentage={enrollment.progress} />

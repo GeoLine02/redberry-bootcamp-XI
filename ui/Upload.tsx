@@ -20,65 +20,93 @@ export default function Upload({
   onChange,
 }: UploadProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [imageName, setImageName] = useState("");
+  const [fileSize, setFileSize] = useState<null | number>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-
+  const [validationError, setValidationError] = useState<null | string>(null);
   const handleClick = () => {
     inputRef.current?.click();
   };
 
+  const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
+  function beforeUpload(file: File): boolean {
+    // check mime type
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      setValidationError("Only JPG, JPEG, PNG, and WEBP files are allowed.");
+      return false;
+    }
+
+    return true;
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
-    // call RHF's onChange
+
+    // nothing selected
+    if (!file) {
+      onChange?.(null);
+      return;
+    }
+
+    if (!beforeUpload(file)) {
+      if (inputRef.current) inputRef.current.value = "";
+      return;
+    }
+
+    // call RHF change
     registration?.onChange(e);
 
-    // call custom onChange to set form value
-    if (onChange) onChange(file);
+    // custom change
+    setImageName(file.name);
+    setFileSize(file.size);
 
-    if (file && preview) {
+    onChange?.(file);
+
+    // preview
+    if (preview) {
       const url = URL.createObjectURL(file);
       setImagePreview(url);
     }
   };
 
-  const handleRemove = () => {
-    setImagePreview(null);
-    if (inputRef.current) {
-      inputRef.current.value = "";
-      registration?.onChange({
-        target: { name: registration.name, value: null },
-      });
-      if (onChange) onChange(null);
-    }
+  const handleChangeClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // prevent parent click behavior
+    inputRef.current?.click();
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full ">
       {label && (
         <label className="block mb-2 text-sm font-medium">{label}</label>
       )}
 
       <div
         onClick={!imagePreview ? handleClick : undefined}
-        className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition hover:bg-gray-50 ${
+        className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition hover:bg-light-purple ${
           error ? "border-red-500" : "border-gray-300"
         } relative`}
       >
         {imagePreview ? (
-          <div className="relative inline-block">
+          <div className="relative flex gap-2">
             <Image
               src={imagePreview}
               alt="preview"
-              width={300}
-              height={300}
-              className="mx-auto h-32 object-contain rounded-lg"
+              width={54}
+              height={54}
+              className="min-w-13.5 max-w-13.5 aspect-square rounded-full object-fill"
             />
-            <button
-              type="button"
-              onClick={handleRemove}
-              className="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded-full hover:bg-red-600"
-            >
-              Remove
-            </button>
+            <div className="space-y-0.5">
+              <h2 className="text-dark-gray">{imageName}</h2>
+              <h2 className="text-medium-gray">Size - {fileSize}MB</h2>
+              <button
+                type="button"
+                onClick={handleChangeClick}
+                className="text-sm text-primary-purple underline hover:opacity-80"
+              >
+                Change
+              </button>
+            </div>
           </div>
         ) : (
           <div className="flex flex-col gap-2">
@@ -94,6 +122,9 @@ export default function Upload({
               </p>
               <p className="text-medium-gray">JPG, PNG or WebP</p>
             </div>
+            {validationError && (
+              <p className="text-red-500 font-medium">{validationError}</p>
+            )}
           </div>
         )}
       </div>

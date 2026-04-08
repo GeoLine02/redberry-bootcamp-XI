@@ -9,6 +9,8 @@ import EnrolledCourse from "./EnrolledCourse";
 import RateCourse from "./RateCourse";
 import EnrollmentForm from "./EnrollmentForm";
 import useCourseActions from "../hooks/useCourseActions";
+import Image from "next/image";
+import X from "@/public/X.svg";
 
 interface EnrollNowProps {
   weeklySchedules: WeeklyScheduleType[];
@@ -36,6 +38,7 @@ export default function Enrollment({
 
   const [enrolledCourse, setEnrolledCourse] =
     useState<CourseEnrollmentDetailsType | null>(enrollment || null);
+  const [hideRatingSection, setHideRatingSection] = useState(false);
 
   const {
     isCourseRated,
@@ -70,15 +73,27 @@ export default function Enrollment({
           {isCourseRated ? (
             <p>You&apos;ve already rated this course</p>
           ) : (
-            <div className="bg-white rounded-xl p-15 flex flex-col items-center gap-4.5 w-full">
-              <h1 className="font-medium text-dark-gray">
-                Rate your experience
-              </h1>
-              <RateCourse
-                rating={courseRating}
-                handleRateCourse={handleRateCourse}
-              />
-            </div>
+            <>
+              {!hideRatingSection && (
+                <div className="bg-white rounded-xl p-10 flex flex-col items-center gap-4.5 w-full">
+                  <div className="w-full flex justify-end">
+                    <Image
+                      onClick={() => setHideRatingSection(true)}
+                      className="cursor-pointer"
+                      src={X}
+                      alt=""
+                    />
+                  </div>
+                  <h1 className="font-medium text-dark-gray">
+                    Rate your experience
+                  </h1>
+                  <RateCourse
+                    rating={courseRating}
+                    handleRateCourse={handleRateCourse}
+                  />
+                </div>
+              )}
+            </>
           )}
           {!user && <UnauthenticationWarning />}
         </section>
