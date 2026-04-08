@@ -17,8 +17,6 @@ interface EnrolledCourseCardProps {
 }
 
 const EnrolledCourseCard = ({ enrolledCourse }: EnrolledCourseCardProps) => {
-  console.log(enrolledCourse);
-
   const { closeModal } = useModal();
 
   return (

@@ -88,7 +88,6 @@ export default function BrowseClient({
           selectedFilters.selectedTopicIds,
           selectedFilters.selectedInstructorIds,
         );
-        console.log(res);
         setCourses(res.data);
         setCurrentPage(res.meta.currentPage);
         setLastPage(res.meta.lastPage);

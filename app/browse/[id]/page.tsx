@@ -15,7 +15,6 @@ export default async function CourseDetails({ params }: CourseDetailsProps) {
   const resolvedParams = await params;
   const courseDetails = await getCourseDetails(Number(resolvedParams.id));
   const weeklySchedules = await getWeeklySchedules(Number(resolvedParams.id));
-  console.log(courseDetails);
   return (
     <div>
       <span className="flex items-center gap-1 font-medium text-[18px] mt-16 mb-8">

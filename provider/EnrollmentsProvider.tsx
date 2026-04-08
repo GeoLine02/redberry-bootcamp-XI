@@ -33,7 +33,6 @@ export const EnrollmentsProvider = ({ children }: { children: ReactNode }) => {
     const handleFetchEnrollments = async () => {
       try {
         const res = await getInprogressCourses();
-        console.log(res.data);
         setEnrolledCourses(res.data);
       } catch (error) {
         console.log(error);

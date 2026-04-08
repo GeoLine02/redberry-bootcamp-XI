@@ -19,7 +19,6 @@ const TimeSLotCard = ({
   selectedOptions,
 }: TimeSLotCardProps) => {
   const isSelected = selectedOptions.timeSlotId === timeSlot.id;
-  console.log(timeSlot);
   return (
     <div
       onClick={() => handleChooseTimeSlot(timeSlot.id)}

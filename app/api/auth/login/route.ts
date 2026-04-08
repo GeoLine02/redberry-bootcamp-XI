@@ -10,7 +10,6 @@ export async function POST(req: Request) {
   });
 
   const data = await backendRes.json();
-  console.log(data);
   if (!backendRes.ok) {
     return NextResponse.json(data, { status: backendRes.status });
   }
