@@ -15,6 +15,7 @@ import {
 } from "../../types";
 import { sortOptionsData } from "../../data";
 import Pagination from "@/app/(home)/components/Pagination";
+import SortCourses from "./SortCourses";
 
 interface BrowseClientProps {
   coursesData: CoursesWithPagination;
@@ -117,31 +118,13 @@ export default function BrowseClient({
           handleClearFilters={handleClearFilters}
         />
         <div className="flex flex-col gap-8 items-center">
-          <div className="w-full flex items-center justify-between">
-            <span>
-              Showing {courses.length} out of {totalPages}
-            </span>
-            <DropDown className="min-w-58.5 max-w-fit">
-              <DropDown.Trigger className="bg-white border-0!">
-                <span className="font-medium">Sort By: </span>{" "}
-                {selectedSort?.label.length && (
-                  <span className="font-medium text-primary-purple">
-                    {selectedSort?.label}
-                  </span>
-                )}
-              </DropDown.Trigger>
-              <DropDown.Menu className="border">
-                {sortOptionsData.map((option) => (
-                  <DropDown.Item
-                    onSelect={() => onSort(option)}
-                    key={option.value}
-                  >
-                    {option.label}
-                  </DropDown.Item>
-                ))}
-              </DropDown.Menu>
-            </DropDown>
-          </div>
+          <SortCourses
+            coursesCount={courses.length}
+            onSort={onSort}
+            selectedSort={selectedSort}
+            sortOptions={sortOptionsData}
+            totalPages={totalPages}
+          />
           <CoursesList courses={courses} />
           <Pagination
             handler={handleChangePage}
