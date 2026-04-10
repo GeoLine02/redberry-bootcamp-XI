@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { getCourses } from "../../services";
 import CoursesList from "../../components/CoursesList";
 import Filters from "../../components/Filters";
-import DropDown from "@/ui/DropDown";
 import {
   CategoryFilterType,
   InstructorFIlterType,

@@ -29,6 +29,7 @@ export default function SignUpModal() {
     handleSubmit,
     trigger,
     setError,
+    watch,
     formState: { errors, isSubmitting },
     setValue,
   } = useForm<SignUpFormValues>({
@@ -41,6 +42,8 @@ export default function SignUpModal() {
       image: null,
     },
   });
+
+  console.log("Form values:", watch());
 
   /* ---------- steps ---------- */
 
@@ -76,7 +79,9 @@ export default function SignUpModal() {
       formData.append("username", data.username);
       formData.append("password", data.password);
       formData.append("password_confirmation", data.confirmPassword);
-      formData.append("avatar", data.image as File);
+      if (data.image instanceof File) {
+        formData.append("avatar", data.image);
+      }
 
       const res = await signUp(formData);
       console.log(res);
