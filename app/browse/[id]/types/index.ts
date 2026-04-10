@@ -89,3 +89,10 @@ export interface EnrollmentConflictType {
   conflictingCourseName: string;
   schedule: string;
 }
+
+export interface SelectedEnrollmentOptionsType {
+  courseScheduleId: number | null;
+  weeklyScheduleId: number | null;
+  sessionTypeId: number | null;
+  timeSlotId: number | null;
+}

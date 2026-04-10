@@ -2,8 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { getSessionTypes, getTimeSlots } from "../services";
-import { SessionType, TimeSlotType } from "../types";
-import { SelectedOptions } from "../components/Enrollment";
+import {
+  SelectedEnrollmentOptionsType,
+  SessionType,
+  TimeSlotType,
+} from "../types";
 
 export default function useEnrollmentForm(courseId: number, basePrice: number) {
   const [collapsedSection, setCollapsedSection] = useState<
@@ -16,12 +19,13 @@ export default function useEnrollmentForm(courseId: number, basePrice: number) {
   const [priceModifier, setPriceModifier] = useState<number | null>(null);
   const [sessions, setSessions] = useState<SessionType[]>([]);
   const [timeSlots, setTimeSlots] = useState<TimeSlotType[]>([]);
-  const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({
-    courseScheduleId: null,
-    weeklyScheduleId: null,
-    sessionTypeId: null,
-    timeSlotId: null,
-  });
+  const [selectedOptions, setSelectedOptions] =
+    useState<SelectedEnrollmentOptionsType>({
+      courseScheduleId: null,
+      weeklyScheduleId: null,
+      sessionTypeId: null,
+      timeSlotId: null,
+    });
 
   const handleChooseWeeklySchedule = (scheduleId: number) => {
     setSelectedOptions((prev) => ({ ...prev, weeklyScheduleId: scheduleId }));

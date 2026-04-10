@@ -1,19 +1,22 @@
 import Image from "next/image";
 import WarningIcon from "@/public/Warning.svg";
 import { Button } from "@/ui/Button";
-import { CourseEnrollmentDetailsType, EnrollmentConflictType } from "../types";
-import { SelectedOptions } from "./Enrollment";
+import {
+  CourseEnrollmentDetailsType,
+  EnrollmentConflictType,
+  SelectedEnrollmentOptionsType,
+} from "../types";
 import { EnrollOnCourseResponse } from "../services";
 import { useModal } from "@/provider/ModalProvider";
 import { Dispatch, SetStateAction } from "react";
 
 interface EnrollmentConfilctModalProps {
   conflicts: EnrollmentConflictType[];
-  selectedOptions: SelectedOptions;
+  selectedOptions: SelectedEnrollmentOptionsType;
   courseId: number;
   enrollOnCourse(
     courseId: number,
-    selectedOptions: SelectedOptions,
+    selectedOptions: SelectedEnrollmentOptionsType,
     force: boolean,
   ): Promise<EnrollOnCourseResponse>;
   setEnrolledCourse: Dispatch<
