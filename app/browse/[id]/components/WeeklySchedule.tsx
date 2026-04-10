@@ -1,16 +1,15 @@
-import { WeeklyScheduleType } from "../types";
-import { SelectedOptions } from "./Enrollment";
+import { SelectedEnrollmentOptionsType, WeeklyScheduleType } from "../types";
 
 interface WeeklyScheduleProps {
   weeklySchedules: WeeklyScheduleType[];
   handleChooseWeeklySchedule: (scheduleId: number) => void;
-  selectedOptions: SelectedOptions;
+  selectedOptions: SelectedEnrollmentOptionsType;
 }
 
 interface ScheduleCardProps {
   weeklySchedule: WeeklyScheduleType;
   handleChooseWeeklySchedule: (scheduleId: number) => void;
-  selectedOptions: SelectedOptions;
+  selectedOptions: SelectedEnrollmentOptionsType;
 }
 
 const ScheduleCard = ({

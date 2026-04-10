@@ -40,7 +40,7 @@ export default function ProfileModal() {
         avatar: user.avatar,
         email: user.email,
         fullName: user.fullName,
-        phone: user.mobileNumber,
+        phone: user.mobileNumber ?? "",
       });
     }
   }, [reset, user]);
@@ -56,7 +56,8 @@ export default function ProfileModal() {
       const formData = new FormData();
 
       formData.append("full_name", data.fullName);
-      formData.append("mobile_number", data.phone.toString());
+      const rawPhoneNumber = data.phone.split(" ")[1];
+      formData.append("mobile_number", rawPhoneNumber.toString());
       formData.append("age", data.age.toString());
 
       if (data.avatar instanceof File) {
@@ -166,7 +167,8 @@ export default function ProfileModal() {
             <div>
               <Input
                 label="Mobile Number"
-                placeholder="+995 599209820"
+                placeholder="599209820"
+                prefix={"+995"}
                 {...register("phone")}
               />
               {errors.phone && (

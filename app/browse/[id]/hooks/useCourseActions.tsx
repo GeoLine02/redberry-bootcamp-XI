@@ -51,6 +51,7 @@ export default function useCourseActions({
     if (!enrolledCourse) return;
     try {
       const res = await completeEnrollment(enrolledCourse.id);
+      console.log("123123", res.data);
       setEnrolledCourse(res.data);
       setEnrolledCourses((prev) =>
         prev.filter((enrollment) => enrollment.id !== enrolledCourse.id),

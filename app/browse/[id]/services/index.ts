@@ -1,7 +1,7 @@
 import api from "@/utils/axios";
-import { SelectedOptions } from "../components/Enrollment";
 import axios from "axios";
 import { EnrollmentType } from "@/shared/types";
+import { SelectedEnrollmentOptionsType } from "../types";
 
 export async function getSessionTypes(
   courseId: number,
@@ -45,7 +45,7 @@ export interface EnrollOnCourseResponse {
 
 export async function enrollOnCourse(
   courseId: number,
-  selectedOptions: SelectedOptions,
+  selectedOptions: SelectedEnrollmentOptionsType,
   force: boolean,
 ): Promise<EnrollOnCourseResponse> {
   try {

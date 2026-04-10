@@ -1,18 +1,17 @@
 import Image from "next/image";
-import { SessionType } from "../types";
-import { SelectedOptions } from "./Enrollment";
+import { SelectedEnrollmentOptionsType, SessionType } from "../types";
 import WarrningIcon from "@/public/Warning.svg";
 
 interface SessionTypeSectionProps {
   sessions: SessionType[];
   handleChooseSessionType: (sessionTypeId: number) => void;
-  selectedOptions: SelectedOptions;
+  selectedOptions: SelectedEnrollmentOptionsType;
 }
 
 interface SessionTypeCardProps {
   session: SessionType;
   handleChooseSessionType: (sessionTypeId: number) => void;
-  selectedOptions: SelectedOptions;
+  selectedOptions: SelectedEnrollmentOptionsType;
 }
 
 const SesstionTypeCard = ({

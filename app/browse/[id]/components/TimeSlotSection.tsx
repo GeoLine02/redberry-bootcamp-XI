@@ -1,16 +1,15 @@
-import { TimeSlotType } from "../types";
-import { SelectedOptions } from "./Enrollment";
+import { SelectedEnrollmentOptionsType, TimeSlotType } from "../types";
 
 interface TimeSlotSectionProps {
   timeSlots: TimeSlotType[];
   handleChooseTimeSlot: (timeSlotId: number) => void;
-  selectedOptions: SelectedOptions;
+  selectedOptions: SelectedEnrollmentOptionsType;
 }
 
 interface TimeSLotCardProps {
   timeSlot: TimeSlotType;
   handleChooseTimeSlot: (timeSlotId: number) => void;
-  selectedOptions: SelectedOptions;
+  selectedOptions: SelectedEnrollmentOptionsType;
 }
 
 const TimeSLotCard = ({
