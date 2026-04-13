@@ -14,11 +14,12 @@ import { useState } from "react";
 import EyeClosed from "@/public/EyeClosed.svg";
 import { signIn } from "@/shared/services/auth";
 import { useUser } from "@/provider/UserProvider";
+import { useRouter } from "next/navigation";
 
 export default function SignInModal() {
   const { openModal, closeModal } = useModal();
   const { setUser } = useUser();
-
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -39,6 +40,7 @@ export default function SignInModal() {
     try {
       const res = await signIn(data);
       setUser(res.data.user);
+      router.refresh();
       closeModal();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {

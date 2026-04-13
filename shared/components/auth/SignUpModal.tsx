@@ -29,7 +29,6 @@ export default function SignUpModal() {
     handleSubmit,
     trigger,
     setError,
-    watch,
     formState: { errors, isSubmitting },
     setValue,
   } = useForm<SignUpFormValues>({
@@ -42,10 +41,6 @@ export default function SignUpModal() {
       image: null,
     },
   });
-
-  console.log("Form values:", watch());
-
-  /* ---------- steps ---------- */
 
   const nextStep = async () => {
     const stepFields: Record<number, (keyof SignUpFormValues)[]> = {
@@ -68,8 +63,6 @@ export default function SignUpModal() {
   const prevStep = () => {
     if (currentStep > 1) setCurrentStep((s) => s - 1);
   };
-
-  /* ---------- submit ---------- */
 
   const onSubmit: SubmitHandler<SignUpFormValues> = async (data) => {
     try {
@@ -98,11 +91,8 @@ export default function SignUpModal() {
   };
 
   return (
-    /* ===== CENTER WRAPPER ===== */
     <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
-      {/* ===== MODAL CARD ===== */}
       <div className="w-full max-w-115 relative bg-white rounded-xl shadow-xl pointer-events-auto">
-        {/* Step Back */}
         {currentStep > 1 && (
           <div
             className="absolute cursor-pointer top-5 left-3.75"
@@ -112,7 +102,6 @@ export default function SignUpModal() {
           </div>
         )}
 
-        {/* Close */}
         <div
           className="absolute cursor-pointer top-5 right-3.75"
           onClick={closeModal}
@@ -124,7 +113,6 @@ export default function SignUpModal() {
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-4 w-full p-12.5"
         >
-          {/* Header */}
           <div className="text-center mb-6">
             <h1 className="text-[36px] font-semibold">Create Account</h1>
             <p className="text-medium-gray font-medium">
@@ -132,7 +120,6 @@ export default function SignUpModal() {
             </p>
           </div>
 
-          {/* Steps */}
           {currentStep === 1 && (
             <SignUpStepOne register={register} errors={errors} />
           )}
@@ -149,12 +136,10 @@ export default function SignUpModal() {
             />
           )}
 
-          {/* Server Error */}
           {errors.root?.message && (
             <p className="text-red-500 text-sm">{errors.root.message}</p>
           )}
 
-          {/* Next Button */}
           <Button
             variant="primary"
             type="button"
@@ -165,14 +150,12 @@ export default function SignUpModal() {
             {currentStep === 3 ? "Sign Up" : "Next"}
           </Button>
 
-          {/* Divider */}
           <div className="flex items-center justify-center gap-2 px-4 w-full text-medium-gray">
             <div className="border-t h-px w-full border-border-gray" />
             <span>or</span>
             <div className="border-t h-px w-full border-border-gray" />
           </div>
 
-          {/* Switch modal */}
           <p className="text-medium-gray text-center">
             Already have an account?{" "}
             <button

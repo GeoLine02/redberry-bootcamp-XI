@@ -1,7 +1,11 @@
 "use client";
 
-import { CourseEnrollmentDetailsType, WeeklyScheduleType } from "../types";
-import { useState } from "react";
+import {
+  CourseEnrollmentDetailsType,
+  ReviewType,
+  WeeklyScheduleType,
+} from "../types";
+import { useEffect, useState } from "react";
 import { useUser } from "@/provider/UserProvider";
 import IncompleteAccountWarning from "./IncompleteAccuntWarning";
 import UnauthenticationWarning from "./UnauthenticationWarning";
@@ -17,7 +21,9 @@ interface EnrollNowProps {
   courseId: number;
   basePrice: number;
   enrollment: CourseEnrollmentDetailsType;
-  isCourseRatedData: boolean;
+  isCourseRated: boolean;
+  onRatingUpdate: (rating: number) => void; // 👈 add this
+  reviews: ReviewType[];
 }
 
 export default function Enrollment({
@@ -25,17 +31,19 @@ export default function Enrollment({
   courseId,
   basePrice,
   enrollment,
-  isCourseRatedData,
+  onRatingUpdate,
+  isCourseRated,
 }: EnrollNowProps) {
   const { user } = useUser();
-
   const [enrolledCourse, setEnrolledCourse] =
     useState<CourseEnrollmentDetailsType | null>(enrollment || null);
 
-  const [hideRatingSection, setHideRatingSection] = useState(false);
+  useEffect(() => {
+    setEnrolledCourse(enrollment);
+  }, [enrollment]);
 
+  const [hideRatingSection, setHideRatingSection] = useState(false);
   const {
-    isCourseRated,
     courseRating,
     handleRateCourse,
     retakeEnrollment,
@@ -44,7 +52,8 @@ export default function Enrollment({
     courseId,
     enrolledCourse,
     setEnrolledCourse,
-    isCourseRatedData,
+    onRatingUpdate,
+    isCourseRated,
   });
 
   return (

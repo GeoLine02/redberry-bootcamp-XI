@@ -9,16 +9,17 @@ interface UseCourseActionsParams {
   courseId: number;
   enrolledCourse: CourseEnrollmentDetailsType | null;
   setEnrolledCourse: (course: CourseEnrollmentDetailsType | null) => void;
-  isCourseRatedData: boolean;
+  onRatingUpdate: (rating: number) => void;
+  isCourseRated: boolean;
 }
 
 export default function useCourseActions({
   courseId,
   enrolledCourse,
   setEnrolledCourse,
-  isCourseRatedData,
+  onRatingUpdate,
+  isCourseRated,
 }: UseCourseActionsParams) {
-  const [isCourseRated, setIsCourseRated] = useState(isCourseRatedData);
   const [courseRating, setCourseRating] = useState(0);
   const { setEnrolledCourses } = useEnrollments();
   const { openModal } = useModal();
@@ -37,9 +38,36 @@ export default function useCourseActions({
   const handleRateCourse = async (rating: number) => {
     try {
       const res = await rateCourse(courseId, rating);
-      if (res.data) {
-        setCourseRating(res.data.rating);
-        setIsCourseRated(true);
+
+      if (res.data && enrolledCourse) {
+        const oldAvg = enrolledCourse.course.avgRating;
+        const count = enrolledCourse.course.reviewCount;
+        const oldUserRating = courseRating;
+
+        let newAvg = oldAvg;
+        let newCount = count;
+
+        if (oldUserRating) {
+          // ✅ updating existing rating
+          newAvg = (oldAvg * count - oldUserRating + rating) / count;
+        } else {
+          // ✅ first time rating
+          newAvg = (oldAvg * count + rating) / (count + 1);
+          newCount = count + 1;
+        }
+
+        // ✅ update enrolled course state
+        setEnrolledCourse({
+          ...enrolledCourse,
+          course: {
+            ...enrolledCourse.course,
+            avgRating: Number(newAvg.toFixed(1)),
+            reviewCount: newCount,
+          },
+        });
+
+        onRatingUpdate(rating);
+        setCourseRating(rating);
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -51,7 +79,6 @@ export default function useCourseActions({
     if (!enrolledCourse) return;
     try {
       const res = await completeEnrollment(enrolledCourse.id);
-      console.log("123123", res.data);
       setEnrolledCourse(res.data);
       setEnrolledCourses((prev) =>
         prev.filter((enrollment) => enrollment.id !== enrolledCourse.id),
@@ -70,7 +97,6 @@ export default function useCourseActions({
   };
 
   return {
-    isCourseRated,
     courseRating,
     handleRateCourse,
     retakeEnrollment,
