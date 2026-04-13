@@ -18,7 +18,6 @@ export async function signUp(formData: FormData) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error.response?.data?.errors) {
-      console.log("1231123", error.response.data);
       throw error.response.data; // { message, errors: { username: [...] } }
     }
     throw error;

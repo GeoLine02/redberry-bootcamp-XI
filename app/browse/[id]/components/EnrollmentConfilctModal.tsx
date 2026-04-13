@@ -36,8 +36,8 @@ export default function EnrollmentConfilctModal({
   const forceEnrollment = async () => {
     try {
       const res = await enrollOnCourse(courseId, selectedOptions, true);
-
       setEnrolledCourse(res.data);
+      closeModal();
     } catch (error) {
       console.log(error);
     }

@@ -23,7 +23,7 @@ export default function EnrolledCourse({
   const isCompleted = enrollment.progress === 100;
 
   return (
-    <div className="w-full max-w-113 space-y-5.5 mt-17.5">
+    <div className="w-full space-y-5.5 mt-17.5">
       <span
         className={`${isCompleted ? "bg-success/10 text-success" : "bg-light-purple text-primary-purple"} p-4 font-medium rounded-full inline-block`}
       >

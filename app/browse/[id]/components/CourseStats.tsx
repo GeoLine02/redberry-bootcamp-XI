@@ -1,11 +1,11 @@
 import Image from "next/image";
-import { CourseCategoryType } from "../types";
+import { CourseCategoryType, ReviewType } from "../types";
 import StarIcon from "@/public/Star.svg";
 
 interface CourseStatsProps {
   title: string;
   durationWeeks: number;
-  rating: string;
+  rating: ReviewType[];
   category: CourseCategoryType;
   description: string;
   image: string;
@@ -23,6 +23,11 @@ export default function CourseStats({
   lecturerImage,
   lecturerName,
 }: CourseStatsProps) {
+  const avgRating =
+    rating.length > 0
+      ? rating.reduce((acc, review) => acc + review.rating, 0) / rating.length
+      : 0;
+
   return (
     <div className="max-w-225.75 space-y-2">
       <h1 className="text-[40px] font-semibold">{title}</h1>
@@ -45,7 +50,7 @@ export default function CourseStats({
         <div className="flex gap-2">
           <div className="flex items-center">
             <Image src={StarIcon} alt="Star" />
-            <span>{rating}</span>
+            <span>{avgRating.toFixed(1)}</span>
           </div>
           <div className="rounded-md bg-white px-3 py-1.75 font-medium">
             <span>{category.name}</span>

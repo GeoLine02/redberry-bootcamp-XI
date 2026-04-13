@@ -65,6 +65,26 @@ export interface SessionType {
   location: string;
 }
 
+export interface ReviewType {
+  userId: number;
+  rating: number;
+}
+
+export interface CourseDetailsType {
+  id: number;
+  title: string;
+  description: string;
+  enrollement: CourseEnrollmentDetailsType | null;
+  image: string;
+  basePrice: number;
+  durationWeeks: number;
+  isRated: boolean;
+  category: CourseCategoryType;
+  topic: CourseTopicType;
+  instructor: CourseInstructorType;
+  reviews: ReviewType[];
+}
+
 export interface CourseEnrollmentDetailsType {
   id: number;
   quantity: number;
@@ -74,6 +94,8 @@ export interface CourseEnrollmentDetailsType {
   course: CourseType & {
     category: CourseCategoryType;
     topic: CourseTopicType;
+    avgRating: number;
+    reviewCount: number;
     instructor: CourseInstructorType;
   };
   schedule: {
